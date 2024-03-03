@@ -1,0 +1,80 @@
+.khelotsu-header {
+	align-items: center;
+	height: 5rem;
+	display: flex;
+	justify-content: space-between;
+	padding: 0.5rem 4rem 0.5rem 1.5rem;
+	background-color: #edb098;
+
+	&-left {
+		width: 7rem;
+		height: 4rem;
+		margin-top: 1rem;
+
+		img {
+			width: 3rem;
+			height: 3rem;
+			border-radius: 50%;
+		}
+	}
+
+	&-name {
+		color: #3017e9;
+		font-size: 2.5rem;
+	}
+
+	&-right {
+		width: 4rem;
+		height: 2.5rem;
+
+		&-login {
+			display: flex;
+			justify-content: center;
+			width: inherit;
+			height: 1.5rem;
+			padding: 0.75rem 0.5rem 0.65rem 0.5rem;
+			border-radius: 0.5rem;
+			background-color: #4285f4;
+			color: white;
+			cursor: pointer;
+
+			&:hover {
+				background-color: #2962ff;
+			}
+		}
+
+		&-logout {
+			width: 2rem;
+			height: 2rem;
+			margin-right: -2rem;
+			cursor: pointer;
+			position: relative;
+
+			img {
+				width: inherit;
+				height: inherit;
+				border-radius: 50%;
+			}
+
+			&-dropdown {
+				position: absolute; // Position dropdown absolutely
+				top: 2.25rem; // Adjust top position as needed
+				left: 0; // Align with profile icon
+				background-color: #fff; // Background color of dropdown
+				border: 1px solid #ddd; // Border color
+				border-radius: 0.5rem; // Border radius
+				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); // Box shadow
+				z-index: 10; // Ensure dropdown appears above other content
+
+				&__logout {
+					padding: 0.5rem 1rem; // Adjust padding as needed
+					cursor: pointer;
+
+					&:hover {
+						background-color: #f5f5f5; // Hover background color
+					}
+				}
+			}
+		}
+	}
+}

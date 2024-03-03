@@ -1,0 +1,9 @@
+.khelotsu-authentication {
+	background-image: url("../../Assets/Images/authentication-page-bg.jpg");
+	background-size: 100% 100%; /* Cover entire container */
+	background-position: center; /* Center the image */
+	width: 100vw; /* Full width of the viewport */
+	height: calc(100vh - 6rem);
+	display: flex;
+	align-items: center;
+}

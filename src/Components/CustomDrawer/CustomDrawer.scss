@@ -1,0 +1,48 @@
+.khelotsu-custom-drawer {
+	background-color: white;
+	width: 100%;
+	height: 100%;
+	overflow-y: auto;
+	border-radius: 0.5rem;
+	transition: transform 0.4s ease-in-out;
+
+	&-open {
+		transform: translateX(0) !important;
+	}
+
+	&-close {
+		transform: translateX(-100%);
+	}
+
+	&-right {
+		transform: translateX(100%);
+	}
+
+	&-content {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		padding: 1rem;
+
+		&-heading {
+			font-size: 1.5rem;
+			font-weight: bold;
+			margin-bottom: 20px;
+			display: flex;
+			justify-content: space-between;
+			height: 5%;
+
+			&-close-button {
+				position: relative;
+				top: -7.5%;
+				cursor: pointer;
+				display: flex;
+				align-items: flex-start;
+			}
+		}
+
+		&-children {
+			height: 85%;
+		}
+	}
+}

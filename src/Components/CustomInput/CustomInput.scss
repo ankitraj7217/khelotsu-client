@@ -1,0 +1,36 @@
+.custom-input {
+	position: relative;
+	width: 100%;
+
+	input {
+		padding-top: 1.25rem;
+		width: 100%;
+		border: none;
+		border-bottom: 1px solid black;
+		border-radius: 5px;
+		transition: border-color 0.3s ease;
+
+		&:hover,
+		&:focus {
+			outline: none;
+			border: none;
+			border-bottom: 1px solid black;
+		}
+	}
+
+	label {
+		position: absolute;
+		left: 10px;
+		top: 50%;
+		transform: translateY(-50%);
+		color: #aaa;
+		pointer-events: none;
+		transition: top 0.3s, font-size 0.3s, color 0.3s;
+	}
+
+	&.focused label {
+		top: 0%;
+		font-size: 12px;
+		color: #007bff;
+	}
+}

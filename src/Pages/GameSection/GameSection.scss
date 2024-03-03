@@ -1,0 +1,96 @@
+.khelotsu-game {
+	background-size: 100% 100%; /* Cover entire container */
+	background-position: center; /* Center the image */
+	width: 100vw; /* Full width of the viewport */
+	height: calc(100vh - 6rem);
+	position: relative;
+
+	&-drawer {
+		position: absolute;
+		top: 1%;
+		width: 20%;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+
+		&-details {
+			height: 90%;
+		}
+
+		&-icon {
+			width: 100%;
+			height: 10%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+
+			img {
+				width: 25%;
+				height: 75%;
+				border-radius: 0.5rem;
+				padding: 0.25rem;
+				cursor: pointer;
+				background-color: wheat;
+				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+			}
+		}
+	}
+
+	&-list {
+		left: 0;
+
+		&-details {
+			&-game {
+				width: 100%;
+				height: 20%;
+				margin-bottom: 1rem;
+				border: 1px solid rgb(57, 55, 55);
+				border-radius: 0.5rem;
+				padding: 0.1rem;
+				cursor: pointer;
+			}
+		}
+	}
+
+	&-section {
+		position: relative;
+		top: 10%;
+		left: 50%;
+		transform: translate(-50%);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		background-color: wheat;
+		padding: 1rem;
+		width: fit-content;
+		border: 0.5rem solid black;
+		border-radius: 0.5rem;
+
+		&-left-player-confirmation,
+		&-right-player-confirmation {
+			display: flex;
+			flex-direction: column;
+			margin: 1rem;
+
+			&-icon {
+				width: 2rem;
+				height: 2rem;
+				cursor: pointer;
+				margin-bottom: 1rem;
+
+				img {
+					width: inherit;
+					height: inherit;
+				}
+			}
+
+			&-username {
+				transform: translate(-15%);
+			}
+		}
+	}
+
+	&-chat {
+		right: 0;
+	}
+}

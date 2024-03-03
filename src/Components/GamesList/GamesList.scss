@@ -1,0 +1,19 @@
+.khelotsu-frontend-games-list {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 1rem;
+	background-image: url("../../Assets/Images/games-dashboard-bg.jpg");
+	background-size: 100% 100%; /* Cover entire container */
+	background-position: center; /* Center the image */
+	width: 100vw; /* Full width of the viewport */
+	height: calc(100vh - 6rem);
+
+	&-game {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border: 1rem solid blue;
+		font-size: 4rem;
+		cursor: pointer;
+	}
+}
