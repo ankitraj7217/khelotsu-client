@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { englishTranslatedValues } from "../Constants/translationValues";
-import { ITranslationData } from "./customInterfaces.ts";
+import { ITranslationData } from "./customInterfaces";
 
 const useTranslation = () => {
 	const [translatedDict, setTranslatedDict] = useState<ITranslationData>({});

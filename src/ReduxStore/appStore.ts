@@ -1,6 +1,6 @@
 // part of redux, not react-redux..need react-redux to provide these functionalities to our app.
 import { configureStore } from "@reduxjs/toolkit";
-import loginReducer from "./Slices/loginSlice.ts";
+import loginReducer from "./Slices/loginSlice";
 
 // Add slices here
 const appStore = configureStore({
