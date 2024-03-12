@@ -1,0 +1,23 @@
+.khelotsu-custom-toast {
+    position: fixed;
+    bottom: -7rem;
+    left: 50%;
+    width: 20rem;
+    height: 5rem;
+    transform: translateX(-50%);
+    transition: bottom 1s ease-in-out;
+
+
+    border-width: 0.25rem;
+    border-style: solid;
+    background-color: white;
+    padding: 0.5rem 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+
+    &-show {
+        bottom: 1rem;
+    }
+}

@@ -3,13 +3,17 @@ import ReactDOM from "react-dom/client";
 import "./App.css";
 import { RouterProvider } from "react-router-dom";
 import appRouter from "./Routes";
+import { Provider as ReduxProvider } from "react-redux";
+import appStore from "./ReduxStore/appStore.ts";
 
 function App() {
-	return (
-		<div className="App">
-			<RouterProvider router={appRouter} />
-		</div>
-	);
+  return (
+    <div className="App">
+      <ReduxProvider store={appStore}>
+        <RouterProvider router={appRouter} />
+      </ReduxProvider>
+    </div>
+  );
 }
 
 export default App;

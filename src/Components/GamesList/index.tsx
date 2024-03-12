@@ -9,61 +9,63 @@ import GamesBoxDisplay from "../GamesBoxDisplay";
 import { currentlySupportedGames } from "../../Constants/temporaryValues";
 
 const GamesList = () => {
-	const [supportedGames, setSupportedGames] = useState<
-		ISupportedGamesListProps[]
-	>([]);
-	const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-	const t = useTranslation();
-	const navigate = useNavigate();
+    const [supportedGames, setSupportedGames] = useState<ISupportedGamesListProps[]>([]);
+    const [gameSelected, setGameSelected] = useState<ISupportedGamesListProps>();
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const t = useTranslation();
+    const navigate = useNavigate();
 
-	const _openModal = () => {
-		setIsModalOpen(true);
-	};
+    const _openModal = (game: ISupportedGamesListProps) => {
+        setGameSelected(game);
+        setIsModalOpen(true);
+    }
 
-	const _closeModal = () => {
-		setIsModalOpen(false);
-	};
+    const _closeModal = () => {
+        setIsModalOpen(false);
+    }
 
-	const _onCustomModalClose = (roomName: string) => {
-		if (roomName) {
-			_closeModal();
-			navigate(`${roomName}`);
-		}
-	};
+    const _onCustomModalClose = (roomName: string) => {
+        if (roomName) {
+            _closeModal();
 
-	useEffect(() => {
-		// api call to get the list
+            if (gameSelected && "id" in gameSelected) {
+                const queryParams = {
+                    game: gameSelected.id
+                }
+                const queryString = new URLSearchParams(queryParams).toString();
+                navigate(`${roomName}?${queryString}`);
 
-		setSupportedGames(currentlySupportedGames);
-	}, []);
+            } else {
+                navigate(`${roomName}`);
+            }
+        }
+    }
 
-	return (
-		<>
-			<section className="khelotsu-frontend-games-list">
-				{supportedGames.map((ele) => {
-					return (
-						<div
-							className="khelotsu-frontend-games-list-game"
-							key={ele.id}
-							aria-label={`select-game-${ele.name}`}
-							onClick={_openModal}>
-							<GamesBoxDisplay
-								id={ele.id}
-								name={ele.name}
-								backgroundImgURL={ele.backgroundImgURL}
-							/>
-						</div>
-					);
-				})}
-			</section>
-			<CustomModal
-				headerName={t("CREATE_ROOM")}
-				isOpen={isModalOpen}
-				closeModal={_closeModal}
-				onClose={_onCustomModalClose}
-			/>
-		</>
-	);
-};
+
+    useEffect(() => {
+        // api call to get the list
+        setSupportedGames(currentlySupportedGames);
+    }, [])
+
+    return (
+        <>
+            <section className="khelotsu-frontend-games-list">
+                {
+                    supportedGames.map((ele) => {
+                        return (
+                            <div className="khelotsu-frontend-games-list-game" key={ele.id} aria-label={`select-game-${ele.name}`}
+                                onClick={() => _openModal(ele)}>
+                                <GamesBoxDisplay {...ele} />
+                            </div>
+                        )
+                    })
+                }
+            </section>
+            <CustomModal headerName={t("CREATE_ROOM")} isOpen={isModalOpen}
+                closeModal={_closeModal}
+                onClose={_onCustomModalClose} />
+        </>
+    )
+}
 
 export default GamesList;

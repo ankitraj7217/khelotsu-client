@@ -1,5 +1,9 @@
 import React from "react";
 
-const SnakeFeed = () => {};
+const SnakeFeed = () => {
+    return (
+        <></>
+    )
+}
 
 export default SnakeFeed;
