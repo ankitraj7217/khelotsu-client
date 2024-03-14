@@ -145,7 +145,7 @@ export const getValidPosBishop = (arr2d: Array<Array<String>>, currPos: String, 
             }
 
             // If there's a piece in the path, stop iterating in this direction
-            if (arr2d[newRow][newCol] !== "") {
+            if (isPieceOnPos(arr2d, newRow, newCol)) {
                 break;
             }
 
@@ -185,7 +185,7 @@ export const getValidPosQueen = (arr2d: Array<Array<String>>, currPos: String, t
             }
 
             // If there's a piece in the path, stop iterating in this direction
-            if (arr2d[newRow][newCol] !== "") {
+            if (isPieceOnPos(arr2d, newRow, newCol)) {
                 break;
             }
 
