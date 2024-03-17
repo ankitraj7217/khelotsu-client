@@ -7,11 +7,14 @@ import CustomModal from "../CustomModal";
 import useTranslation from "../../Utils/useTranslation";
 import GamesBoxDisplay from "../GamesBoxDisplay";
 import { currentlySupportedGames } from "../../Constants/temporaryValues";
+import CustomToast from "../CustomToast";
+import { createRoom } from "../../Network/roomApiCalls";
 
 const GamesList = () => {
     const [supportedGames, setSupportedGames] = useState<ISupportedGamesListProps[]>([]);
     const [gameSelected, setGameSelected] = useState<ISupportedGamesListProps>();
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [errorMsg, setErrorMsg] = useState<string>("");
     const t = useTranslation();
     const navigate = useNavigate();
 
@@ -24,20 +27,35 @@ const GamesList = () => {
         setIsModalOpen(false);
     }
 
-    const _onCustomModalClose = (roomName: string) => {
-        if (roomName) {
-            _closeModal();
+    const _onCustomModalClose = async(roomName: string) => {
+        try {
+            if (roomName) {
+                _closeModal();
 
-            if (gameSelected && "id" in gameSelected) {
-                const queryParams = {
-                    game: gameSelected.id
+                const roomCreated = await createRoom({
+                    roomName
+                })
+
+                console.log(roomCreated);
+                
+
+                if (roomCreated?.data !== roomName) {
+                    throw new Error("Room creation failed");
                 }
-                const queryString = new URLSearchParams(queryParams).toString();
-                navigate(`${roomName}?${queryString}`);
 
-            } else {
-                navigate(`${roomName}`);
+                if (gameSelected && "id" in gameSelected) {
+                    const queryParams = {
+                        game: gameSelected.id
+                    }
+                    const queryString = new URLSearchParams(queryParams).toString();
+                    navigate(`${roomName}?${queryString}`);
+
+                } else {
+                    navigate(`${roomName}`);
+                }
             }
+        } catch (err: any) {
+            setErrorMsg(err?.message)
         }
     }
 
@@ -51,6 +69,9 @@ const GamesList = () => {
         <>
             <section className="khelotsu-frontend-games-list">
                 {
+                    errorMsg && errorMsg.length && <CustomToast color="red" msg={errorMsg} setErrorMsg={setErrorMsg} />
+                }
+                {
                     supportedGames.map((ele) => {
                         return (
                             <div className="khelotsu-frontend-games-list-game" key={ele.id} aria-label={`select-game-${ele.name}`}
@@ -61,7 +82,8 @@ const GamesList = () => {
                     })
                 }
             </section>
-            <CustomModal headerName={t("CREATE_ROOM")} isOpen={isModalOpen}
+            <CustomModal headerName={t("CREATE_ROOM")}
+                isOpen={isModalOpen}
                 closeModal={_closeModal}
                 onClose={_onCustomModalClose} />
         </>

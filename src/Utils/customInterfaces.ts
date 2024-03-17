@@ -41,8 +41,13 @@ export interface ICustomChat {
 export interface ICustomToastProps {
     color: string;
     msg: string;
+    setErrorMsg: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export interface IGameSectionComponent {
     [key: string]: any;
+}
+
+export interface IPrivateRouteComponent {
+    children: ReactNode;
 }

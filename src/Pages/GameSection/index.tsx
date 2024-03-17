@@ -11,16 +11,47 @@ import { createFuncWithNoParams, getURLParams, updateUrlParamsWithoutReload } fr
 import { ISupportedGamesListProps } from "../../Utils/customInterfaces";
 import { GAME_COMPONENTS } from "./GameSection.gameloader";
 import "./GameSection.scss";
+import { useLocation, useNavigate } from "react-router-dom";
+import { isPersonAllowedInRoom } from "../../Network/roomApiCalls";
+import CustomToast from "../../Components/CustomToast";
 
 const GameSection = () => {
     const [isLeftDrawerOpen, setIsLeftDrawerOpen] = useState<boolean>(false);
     const [isRightDrawerOpen, setIsRightDrawerOpen] = useState<boolean>(false);
     const [supportedGames, setSupportedGames] = useState<ISupportedGamesListProps[]>(currentlySupportedGames);
     const [currentGame, setCurrentGame] = useState<ISupportedGamesListProps>();
+    const [errorMsg, setErrorMsg] = useState<string>("");
+
+    const location = useLocation();
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const urlParams = getURLParams();
-        if ("game" in urlParams) switchGame(urlParams["game"])
+
+        const initializeGameRoom = async() => {
+            try {
+                const urlParams = getURLParams();
+                const path = location.pathname.split('/');
+                const roomName = path[path.length - 1];
+
+                const isPersonAllowed = await isPersonAllowedInRoom({
+                    roomName
+                })
+
+                if (!isPersonAllowed?.data?.isAllowed) {
+                    throw new Error("Not allowed to view room details");
+                }
+
+                if ("game" in urlParams) switchGame(urlParams["game"]);
+
+            } catch (err: any) {
+                setErrorMsg(err?.message);
+                setTimeout(() => {
+                    navigate("/games", {replace: true});
+                }, 4000);
+            }
+        }
+
+        initializeGameRoom();
     }, [])
 
     const _switchLeftGamesListDrawer = useCallback(() => {
@@ -41,6 +72,9 @@ const GameSection = () => {
 
     return (
         <section className="khelotsu-game" style={{ backgroundImage: `url(${currentGame?.backgroundImgURL})` }}>
+            {
+                errorMsg && <CustomToast color="red" msg={errorMsg} setErrorMsg={setErrorMsg} />
+            }
             <section className="khelotsu-game-drawer khelotsu-game-list"> {/** Drawer for the games on the leftmost side */}
                 <div className="khelotsu-game-drawer-details khelotsu-game-list-details">
                     <CustomDrawer headerName="Other Games List" isOpen={isLeftDrawerOpen} position="left"

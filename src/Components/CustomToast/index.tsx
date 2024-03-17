@@ -3,7 +3,7 @@ import { ICustomToastProps } from "../../Utils/customInterfaces";
 
 import "./CustomToast.scss";
 
-const CustomToast: FC<ICustomToastProps> = ({color, msg}) => {
+const CustomToast: FC<ICustomToastProps> = ({color, msg, setErrorMsg}) => {
     const [showToast, setShowToast] = useState(false);
     
     useEffect(() => {
@@ -11,6 +11,7 @@ const CustomToast: FC<ICustomToastProps> = ({color, msg}) => {
     
         const timer = setTimeout(() => {
           setShowToast(false);
+          setErrorMsg("");
         }, 4000);
     
         return () => clearTimeout(timer);

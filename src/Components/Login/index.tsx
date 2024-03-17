@@ -6,6 +6,11 @@ import { IParentSetProps } from "../../Utils/customInterfaces";
 import "./Login.scss"
 import { userLoginSchema } from "../../Validations/user.validation";
 import CustomToast from "../CustomToast";
+import { loginUser } from "../../Network/userApiCalls";
+import { setUserDatainCookies } from "../../Utils/genericUtils";
+import { addAndUpdateUser } from "../../ReduxStore/Slices/loginSlice";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 
 const Login: FC<IParentSetProps> = ({setValue}) => {
@@ -13,6 +18,8 @@ const Login: FC<IParentSetProps> = ({setValue}) => {
     const [errorMsg, setErrorMsg] = useState<string>("");
     const usernameRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const t = useTranslation();
 
     const _setLogin = () => {
@@ -29,9 +36,22 @@ const Login: FC<IParentSetProps> = ({setValue}) => {
             await userLoginSchema.validate({
                 userName,
                 password,
-            }, {abortEarly: false})
+            }, {abortEarly: false});
+
+            const user = await loginUser({
+                username: userName,
+                password
+            });
+
+            setUserDatainCookies(user?.data);
+            dispatch(addAndUpdateUser({
+                userName: user?.data?.username,
+                userId: user?.data.userid,
+                email: user?.data?.email
+            }));
+            navigate("/games");
             setErrorMsg("");
-        } catch (error) {
+        } catch (error: any) {
             if (error instanceof yup.ValidationError) {
                 for (const err of error.inner) {
                     if (err.message) {
@@ -40,6 +60,8 @@ const Login: FC<IParentSetProps> = ({setValue}) => {
                         break;
                     }
                 };
+            } else {
+                setErrorMsg(error?.message)
             }
         }
 
@@ -48,7 +70,7 @@ const Login: FC<IParentSetProps> = ({setValue}) => {
     return (
         <section className="khelotsu-login">
             {
-                errorMsg && <CustomToast color="red" msg={errorMsg} />
+                errorMsg && <CustomToast color="red" msg={errorMsg} setErrorMsg={setErrorMsg} />
             }
             <form className="khelotsu-login-form" onSubmit={_onLoginFormSubmit}>
                 <div className="khelotsu-login-form-heading" aria-label="Sign In Header">
