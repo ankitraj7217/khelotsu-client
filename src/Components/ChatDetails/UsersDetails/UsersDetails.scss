@@ -1,0 +1,53 @@
+.users-details {
+    height: 100%;
+
+    &-display {
+
+        height: 75%;
+
+        &-user {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0.5rem;
+            border: 1px solid black;
+            border-radius: 0.25rem;
+            height: 2rem;
+
+            &__remove {
+                width: 1.5rem;
+                height: 1.5rem;
+                font-size: 1.5rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+            }
+        }
+    }
+
+    &-add-user {
+        height: 25%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        &-form {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            margin: 2rem 0.5rem;
+
+            &-input {
+                width: 60%;
+            }
+
+            &-submit {
+                width: 30%;
+                cursor: pointer;
+            }
+        }
+    }
+}

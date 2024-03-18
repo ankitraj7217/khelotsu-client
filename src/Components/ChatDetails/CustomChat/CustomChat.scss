@@ -1,0 +1,69 @@
+.khelotsu-custom-chat {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    &-thread {
+        height: 95%;
+        width: 100%;
+        overflow-y: scroll;
+        margin-bottom: 1rem;
+
+        &-message {
+            display: flex;
+            flex-direction: column;
+            margin-top: 1rem;
+
+            &-metadata {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 0.5rem;
+
+                &__username {
+                    font-size: 0.85rem;
+                }
+
+                &__time {
+                    font-size: 0.75rem;
+                }
+            }
+
+            &-txt {
+                word-wrap: break-word;
+            }
+
+        }
+    }
+
+    &-editor {
+        height: 10%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        &-input {
+            background-color: rgb(233, 229, 229);
+            border: 1px solid white;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            width: 80%;
+            margin-right: 0.5rem;
+
+            &:focus {
+                outline: none;
+            }
+
+            &::placeholder {
+                font-size: 0.75rem;
+            }
+        }
+
+        &-send {
+            width: 15%;
+            height: 50%;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+    }
+}

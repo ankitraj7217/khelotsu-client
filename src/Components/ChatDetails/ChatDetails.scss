@@ -1,0 +1,34 @@
+.chat-details {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    &-header {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-basis: 5%;
+        margin-bottom: 0.1rem;
+
+
+        .underline {
+            text-decoration: underline;
+            text-decoration-color: green;
+            text-underline-offset: 0.25rem;
+        }
+
+        > div {
+            cursor: pointer;
+            flex: 1;
+        }
+    }
+
+    &-info {
+        flex-basis: 95%;
+    }
+
+
+}

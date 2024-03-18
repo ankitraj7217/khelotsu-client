@@ -51,3 +51,8 @@ export interface IGameSectionComponent {
 export interface IPrivateRouteComponent {
     children: ReactNode;
 }
+
+export interface IRoomUsers {
+    names: string[];
+    setErrorMsg: React.Dispatch<React.SetStateAction<string>>;
+}

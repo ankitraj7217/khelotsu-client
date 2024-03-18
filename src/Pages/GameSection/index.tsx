@@ -4,22 +4,24 @@ import ChatIcon from "../../Assets/Icons/chat-icon.png";
 import GameConformIcon from "../../Assets/Icons/game-confirm.png";
 
 import CustomDrawer from "../../Components/CustomDrawer";
-import CustomChat from "../../Components/CustomChat";
+import CustomChat from "../../Components/ChatDetails/CustomChat";
 import { currentlySupportedGames } from "../../Constants/temporaryValues";
 import GamesBoxDisplay from "../../Components/GamesBoxDisplay";
 import { createFuncWithNoParams, getURLParams, updateUrlParamsWithoutReload } from "../../Utils/genericUtils";
-import { ISupportedGamesListProps } from "../../Utils/customInterfaces";
+import { IRoomUsers, ISupportedGamesListProps } from "../../Utils/customInterfaces";
 import { GAME_COMPONENTS } from "./GameSection.gameloader";
 import "./GameSection.scss";
 import { useLocation, useNavigate } from "react-router-dom";
-import { isPersonAllowedInRoom } from "../../Network/roomApiCalls";
+import { isPersonAllowedInRoom, personsAllowedInRoomDetails } from "../../Network/roomApiCalls";
 import CustomToast from "../../Components/CustomToast";
+import ChatDetails from "../../Components/ChatDetails";
 
 const GameSection = () => {
     const [isLeftDrawerOpen, setIsLeftDrawerOpen] = useState<boolean>(false);
     const [isRightDrawerOpen, setIsRightDrawerOpen] = useState<boolean>(false);
     const [supportedGames, setSupportedGames] = useState<ISupportedGamesListProps[]>(currentlySupportedGames);
     const [currentGame, setCurrentGame] = useState<ISupportedGamesListProps>();
+    const [personsAllowedInRoom, setPersonsAllowedInRoom] = useState<string[]>([]);
     const [errorMsg, setErrorMsg] = useState<string>("");
 
     const location = useLocation();
@@ -33,13 +35,15 @@ const GameSection = () => {
                 const path = location.pathname.split('/');
                 const roomName = path[path.length - 1];
 
-                const isPersonAllowed = await isPersonAllowedInRoom({
+                const personsAllowed = await personsAllowedInRoomDetails({
                     roomName
                 })
 
-                if (!isPersonAllowed?.data?.isAllowed) {
-                    throw new Error("Not allowed to view room details");
-                }
+                console.log(personsAllowed);
+                
+                const allowedUserNames = personsAllowed?.data?.map((user: any) => user?.username)
+                
+                setPersonsAllowedInRoom(allowedUserNames);
 
                 if ("game" in urlParams) switchGame(urlParams["game"]);
 
@@ -126,7 +130,7 @@ const GameSection = () => {
                 <div className="khelotsu-game-drawer-details khelotsu-game-chat-details">
                     <CustomDrawer headerName="Chat" isOpen={isRightDrawerOpen} position="right"
                         onCloseCallback={_switchRightChatDrawer}>
-                        <CustomChat />
+                        <ChatDetails names={personsAllowedInRoom} setErrorMsg={setErrorMsg} /> {/** Get names from api */}
                     </CustomDrawer>
                 </div>
                 <div className="khelotsu-game-drawer-icon khelotsu-game-chat-icon">

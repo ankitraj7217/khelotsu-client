@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import HeaderIcon from "../../Assets/Images/header-icon.jpg";
 import useTranslation from "../../Utils/useTranslation";
 import { RootState } from "../../ReduxStore/appStore";
+import { removeUser } from "../../ReduxStore/Slices/loginSlice";
+import { deleteAllValuesFromCookies } from "../../Network/auth";
 import { useNavigate } from "react-router-dom";
 
 import "./Header.scss";
@@ -25,18 +27,15 @@ const Header = () => {
 
     const _logoutUser = async() => {
         try {
-            await logoutUser({})
             deleteAllDataAndReloead();
             setIsLogoutDropdownOpen(!isLogoutDropdownOpen);
-            navigate("/auth");
+            await logoutUser();
         } catch (err) {
             console.log(err); 
         }
     }
 
     useEffect(() => {
-        console.log("checking: ", userName);
-
         if (userName) {
             setIsLoggedIn(true);
         }
