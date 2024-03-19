@@ -1,4 +1,4 @@
-export const env = "https://urban-capybara-x9vjgrxx7pwc9qx9-8000.app.github.dev"; // Change accordingly
+export const env = "https://upgraded-waffle-q9pw5v66w7wfx5r9-8000.app.github.dev";
 export const apiEnv = env + "/api/v1";
 
 export const userApiEnv = apiEnv + "/users";

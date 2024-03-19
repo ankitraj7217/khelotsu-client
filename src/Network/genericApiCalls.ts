@@ -31,8 +31,9 @@ export const handleAPICall = async (isAuthReq: boolean, url: string, method: str
             method,
             headers,
             body: JSON.stringify(dataObj),
-            credentials: isAuthReq ? "include" : "omit"
+            // credentials: isAuthReq ? "include" : "omit"
         })
+
 
         const responseDetails =  await response.json()
         

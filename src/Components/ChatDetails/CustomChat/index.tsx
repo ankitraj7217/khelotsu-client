@@ -1,17 +1,43 @@
-import React, { useState, useEffect, ChangeEvent } from "react";
-import { ICustomChat } from "../../../Utils/customInterfaces";
-import { createFuncWithNoParams } from "../../../Utils/genericUtils";
+import React, { useState, useEffect, ChangeEvent, FC } from "react";
+import { IChat, ICustomChat } from "../../../Utils/customInterfaces";
+import { createFuncWithNoParams, getCurrentDateTime } from "../../../Utils/genericUtils";
 
 import "./CustomChat.scss";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../ReduxStore/appStore";
+import { receiveChatMessage, sendChatMessage } from "../../../Utils/socketUtils";
 
-const CustomChat = () => {
+const CustomChat: FC<IChat> = ({ socket, setErrorMsg }) => {
 
     const [messageThread, setMessageThread] = useState<ICustomChat[]>([]);
     const [currentMsg, setCurrentMsg] = useState<string>("");
+    const userName = useSelector((store: RootState) => store.login.userName);
 
     useEffect(() => {
         // can call api here
         // Sample Message Thread: Remove it later on:
+        try {
+            if (!socket) return;
+
+            receiveChatMessage(socket, (message: string) => {
+                console.log("message incoming: ", message)
+                if (!message.length) return;
+
+                console.log("message: ", message)
+
+                const msgParsed = JSON.parse(message);
+
+                const newMessage: ICustomChat = {
+                    userName: msgParsed?.userName,
+                    messageTime: getCurrentDateTime(),
+                    messageTxt: msgParsed?.msg
+                }
+                setMessageThread((prevMsg) => [...prevMsg, newMessage]);
+
+            })
+        } catch (err: any) {
+            setErrorMsg(err?.message);
+        }
 
         const sampleMessage: ICustomChat[] = [
             {
@@ -47,17 +73,24 @@ const CustomChat = () => {
     const _sendMessage = (msg: string) => {
         // add message and use api to send or use webrtc
         // get username from global state
+        try {
+            if (!socket) throw new Error("Socket not connected! Please refresh page.");
 
-        if (!msg.length) return;
+            if (!msg.length) return;
 
-        const newMessage: ICustomChat = {
-            userName: "User A",
-            messageTime: "4th March, 2.30 PM",
-            messageTxt: msg
+            const newMessage: ICustomChat = {
+                userName,
+                messageTime: getCurrentDateTime(),
+                messageTxt: msg
+            }
+
+            sendChatMessage(socket, JSON.stringify({userName, msg}));
+            setMessageThread((prevMsg) => [...prevMsg, newMessage]);
+            setCurrentMsg("");
+
+        } catch (err: any) {
+            setErrorMsg(err?.message);
         }
-
-        setMessageThread((prevMsg) => [...prevMsg, newMessage]);
-        setCurrentMsg("");
     }
 
     return (

@@ -1,4 +1,5 @@
 import { CSSProperties, ElementType, ReactNode } from "react";
+import { Socket } from "socket.io-client";
 
 export interface ITranslationData {
     [key: string]: string;
@@ -55,4 +56,10 @@ export interface IPrivateRouteComponent {
 export interface IRoomUsers {
     names: string[];
     setErrorMsg: React.Dispatch<React.SetStateAction<string>>;
+    socket?: Socket;
+}
+
+export interface IChat {
+    setErrorMsg: React.Dispatch<React.SetStateAction<string>>;
+    socket: Socket | undefined;
 }

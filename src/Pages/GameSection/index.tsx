@@ -1,4 +1,5 @@
 import React, { Suspense, useCallback, useEffect, useState } from "react";
+import { Socket } from "socket.io-client";
 import GameIcon from "../../Assets/Icons/game-icon.png";
 import ChatIcon from "../../Assets/Icons/chat-icon.png";
 import GameConformIcon from "../../Assets/Icons/game-confirm.png";
@@ -15,6 +16,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { isPersonAllowedInRoom, personsAllowedInRoomDetails } from "../../Network/roomApiCalls";
 import CustomToast from "../../Components/CustomToast";
 import ChatDetails from "../../Components/ChatDetails";
+import { connectToSocket, createSocket } from "../../Utils/socketUtils";
 
 const GameSection = () => {
     const [isLeftDrawerOpen, setIsLeftDrawerOpen] = useState<boolean>(false);
@@ -22,6 +24,7 @@ const GameSection = () => {
     const [supportedGames, setSupportedGames] = useState<ISupportedGamesListProps[]>(currentlySupportedGames);
     const [currentGame, setCurrentGame] = useState<ISupportedGamesListProps>();
     const [personsAllowedInRoom, setPersonsAllowedInRoom] = useState<string[]>([]);
+    const [socket, setSocket] = useState<Socket>();
     const [errorMsg, setErrorMsg] = useState<string>("");
 
     const location = useLocation();
@@ -38,8 +41,6 @@ const GameSection = () => {
                 const personsAllowed = await personsAllowedInRoomDetails({
                     roomName
                 })
-
-                console.log(personsAllowed);
                 
                 const allowedUserNames = personsAllowed?.data?.map((user: any) => user?.username)
                 
@@ -56,6 +57,19 @@ const GameSection = () => {
         }
 
         initializeGameRoom();
+    }, [])
+
+    useEffect(() => {
+        try {
+            const path = location.pathname.split('/');
+            const roomName = path[path.length - 1];
+
+            const socket = createSocket(roomName);
+            setSocket(socket);
+        } catch (err: any) {
+            console.log(err?.message)
+            setErrorMsg(err?.message);
+        }
     }, [])
 
     const _switchLeftGamesListDrawer = useCallback(() => {
@@ -130,7 +144,8 @@ const GameSection = () => {
                 <div className="khelotsu-game-drawer-details khelotsu-game-chat-details">
                     <CustomDrawer headerName="Chat" isOpen={isRightDrawerOpen} position="right"
                         onCloseCallback={_switchRightChatDrawer}>
-                        <ChatDetails names={personsAllowedInRoom} setErrorMsg={setErrorMsg} /> {/** Get names from api */}
+                        <ChatDetails names={personsAllowedInRoom} setErrorMsg={setErrorMsg}
+                            socket={socket} /> {/** Get names from api */}
                     </CustomDrawer>
                 </div>
                 <div className="khelotsu-game-drawer-icon khelotsu-game-chat-icon">

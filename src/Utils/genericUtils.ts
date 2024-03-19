@@ -36,3 +36,28 @@ export const deleteAllDataAndReloead = () => {
         }, 4000)
     }
 }
+
+export const getCurrentDateTime = (): string => {
+    const now = new Date();
+
+    // Format date
+    const dateFormatter = new Intl.DateTimeFormat('en', {
+        day: 'numeric',
+        month: 'long',
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+    });
+
+    const formattedDate = dateFormatter.format(now);
+
+    // Add ordinal suffix to day
+    const day = now.getDate();
+    const ordinalSuffix = (day % 10 === 1 && day !== 11) ? 'st' : (day % 10 === 2 && day !== 12) ? 'nd' : (day % 10 === 3 && day !== 13) ? 'rd' : 'th';
+    const formattedDay = `${day}${ordinalSuffix}`;
+
+    // Combine formatted date and time
+    const currentTime = `${formattedDay} ${formattedDate}`;
+
+    return currentTime;
+};
