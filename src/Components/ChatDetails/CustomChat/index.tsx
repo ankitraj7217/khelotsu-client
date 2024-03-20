@@ -3,67 +3,19 @@ import { IChat, ICustomChat } from "../../../Utils/customInterfaces";
 import { createFuncWithNoParams, getCurrentDateTime } from "../../../Utils/genericUtils";
 
 import "./CustomChat.scss";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../ReduxStore/appStore";
-import { receiveChatMessage, sendChatMessage } from "../../../Utils/socketUtils";
+import { sendChatMessage } from "../../../Utils/socketUtils";
+import { addChatToThread } from "../../../ReduxStore/Slices/chatSlice";
 
 const CustomChat: FC<IChat> = ({ socket, setErrorMsg }) => {
 
-    const [messageThread, setMessageThread] = useState<ICustomChat[]>([]);
     const [currentMsg, setCurrentMsg] = useState<string>("");
+
+    const messageThread = useSelector((store:  RootState) => store.chat.chatData);
     const userName = useSelector((store: RootState) => store.login.userName);
 
-    useEffect(() => {
-        // can call api here
-        // Sample Message Thread: Remove it later on:
-        try {
-            if (!socket) return;
-
-            receiveChatMessage(socket, (message: string) => {
-                console.log("message incoming: ", message)
-                if (!message.length) return;
-
-                console.log("message: ", message)
-
-                const msgParsed = JSON.parse(message);
-
-                const newMessage: ICustomChat = {
-                    userName: msgParsed?.userName,
-                    messageTime: getCurrentDateTime(),
-                    messageTxt: msgParsed?.msg
-                }
-                setMessageThread((prevMsg) => [...prevMsg, newMessage]);
-
-            })
-        } catch (err: any) {
-            setErrorMsg(err?.message);
-        }
-
-        const sampleMessage: ICustomChat[] = [
-            {
-                userName: "User A",
-                messageTime: "4th March, 2:30 PM",
-                messageTxt: "Hi, How are you"
-            },
-            {
-                userName: "User B",
-                messageTime: "4th March, 3:30 PM",
-                messageTxt: "Hi, How are you"
-            },
-            {
-                userName: "User A",
-                messageTime: "4th March, 4:30 PM",
-                messageTxt: "Hi, How are you buddy?"
-            },
-            {
-                userName: "User A",
-                messageTime: "4th March, 4:30 PM",
-                messageTxt: "Hi, How are you"
-            }
-        ]
-        setMessageThread(sampleMessage);
-
-    }, [])
+    const dispatch = useDispatch();
 
     const _setCurrentMessageValue = (e: ChangeEvent<HTMLTextAreaElement>) => {
         setCurrentMsg(e?.target?.value);
@@ -85,7 +37,7 @@ const CustomChat: FC<IChat> = ({ socket, setErrorMsg }) => {
             }
 
             sendChatMessage(socket, JSON.stringify({userName, msg}));
-            setMessageThread((prevMsg) => [...prevMsg, newMessage]);
+            dispatch((addChatToThread(newMessage)));
             setCurrentMsg("");
 
         } catch (err: any) {

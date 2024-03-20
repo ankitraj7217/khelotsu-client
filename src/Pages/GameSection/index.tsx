@@ -8,15 +8,17 @@ import CustomDrawer from "../../Components/CustomDrawer";
 import CustomChat from "../../Components/ChatDetails/CustomChat";
 import { currentlySupportedGames } from "../../Constants/temporaryValues";
 import GamesBoxDisplay from "../../Components/GamesBoxDisplay";
-import { createFuncWithNoParams, getURLParams, updateUrlParamsWithoutReload } from "../../Utils/genericUtils";
-import { IRoomUsers, ISupportedGamesListProps } from "../../Utils/customInterfaces";
+import { createFuncWithNoParams, getCurrentDateTime, getURLParams, updateUrlParamsWithoutReload } from "../../Utils/genericUtils";
+import { ICustomChat, IRoomUsers, ISupportedGamesListProps } from "../../Utils/customInterfaces";
 import { GAME_COMPONENTS } from "./GameSection.gameloader";
 import "./GameSection.scss";
 import { useLocation, useNavigate } from "react-router-dom";
 import { isPersonAllowedInRoom, personsAllowedInRoomDetails } from "../../Network/roomApiCalls";
 import CustomToast from "../../Components/CustomToast";
 import ChatDetails from "../../Components/ChatDetails";
-import { connectToSocket, createSocket } from "../../Utils/socketUtils";
+import { createSocket, receiveChatMessage } from "../../Utils/socketUtils";
+import { addChatToThread } from "../../ReduxStore/Slices/chatSlice";
+import { useDispatch } from "react-redux";
 
 const GameSection = () => {
     const [isLeftDrawerOpen, setIsLeftDrawerOpen] = useState<boolean>(false);
@@ -27,6 +29,7 @@ const GameSection = () => {
     const [socket, setSocket] = useState<Socket>();
     const [errorMsg, setErrorMsg] = useState<string>("");
 
+    const dispatch = useDispatch();
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -66,6 +69,23 @@ const GameSection = () => {
 
             const socket = createSocket(roomName);
             setSocket(socket);
+
+            receiveChatMessage(socket, (message: string) => {
+                console.log("message incoming: ", message)
+                if (!message.length) return;
+
+                console.log("message: ", message)
+
+                const msgParsed = JSON.parse(message);
+
+                const newMessage: ICustomChat = {
+                    userName: msgParsed?.userName,
+                    messageTime: getCurrentDateTime(),
+                    messageTxt: msgParsed?.msg
+                }
+                dispatch((addChatToThread(newMessage)));
+
+            })
         } catch (err: any) {
             console.log(err?.message)
             setErrorMsg(err?.message);
