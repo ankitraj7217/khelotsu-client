@@ -1,4 +1,4 @@
-export const env = "https://upgraded-waffle-q9pw5v66w7wfx5r9-8000.app.github.dev";
+export const env = "https://turbo-doodle-9qjpg6ww4r5fprxr-8000.app.github.dev";
 export const apiEnv = env + "/api/v1";
 
 export const userApiEnv = apiEnv + "/users";

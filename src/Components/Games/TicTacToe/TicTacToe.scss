@@ -1,24 +1,37 @@
 .khelotsu-tictactoe {
-	width: 25rem;
-	height: 25rem;
-	background-color: white;
-	border: 1px solid black;
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	box-sizing: border-box;
+    &-game {
+        width: 25rem;
+        height: 25rem;
+        background-color: white;
+        border: 1px solid black;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        box-sizing: border-box;
 
-	&-square {
-		border: 1px solid black;
-		box-sizing: border-box;
-		cursor: pointer;
-		position: relative;
+        &-square {
+            border: 1px solid black;
+            box-sizing: border-box;
+            cursor: pointer;
+            position: relative;
 
-		span {
-			font-size: 4rem;
-			position: absolute; // can't do with flex as it affects size of borders
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%, -50%); // Center it properly
-		}
-	}
+
+            span {
+                font-size: 4rem;
+                position: absolute; // can't do with flex as it affects size of borders
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%); // Center it properly
+            }
+        }
+    }
+
+    &-start {
+        display: flex;
+        justify-content: center;
+        margin: 1rem;
+        
+        &-btn {
+            cursor: pointer;
+        }
+    }
 }

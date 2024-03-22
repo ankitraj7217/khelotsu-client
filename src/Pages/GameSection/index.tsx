@@ -9,11 +9,11 @@ import CustomChat from "../../Components/ChatDetails/CustomChat";
 import { currentlySupportedGames } from "../../Constants/temporaryValues";
 import GamesBoxDisplay from "../../Components/GamesBoxDisplay";
 import { createFuncWithNoParams, getCurrentDateTime, getURLParams, updateUrlParamsWithoutReload } from "../../Utils/genericUtils";
-import { ICustomChat, IRoomUsers, ISupportedGamesListProps } from "../../Utils/customInterfaces";
-import { GAME_COMPONENTS } from "./GameSection.gameloader";
+import { ICustomChat, ISupportedGamesListProps } from "../../Utils/customInterfaces";
+import {  getGameComponents } from "./GameSection.gameloader";
 import "./GameSection.scss";
 import { useLocation, useNavigate } from "react-router-dom";
-import { isPersonAllowedInRoom, personsAllowedInRoomDetails } from "../../Network/roomApiCalls";
+import { personsAllowedInRoomDetails } from "../../Network/roomApiCalls";
 import CustomToast from "../../Components/CustomToast";
 import ChatDetails from "../../Components/ChatDetails";
 import { createSocket, receiveChatMessage } from "../../Utils/socketUtils";
@@ -146,7 +146,7 @@ const GameSection = () => {
 
                 <div className="khelotsu-game-section-game">
                     <Suspense fallback={<div>Loading...</div>}>
-                        {currentGame && GAME_COMPONENTS[currentGame?.id]}
+                        {currentGame && getGameComponents({socket, setErrorMsg, personsAllowedInRoom})[currentGame?.id]}
                     </Suspense>
                 </div>
 

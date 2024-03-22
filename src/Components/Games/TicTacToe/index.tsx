@@ -1,91 +1,125 @@
-import React, { useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { drawMsg, winningPositions } from "./tictactoe.constants";
 import useTranslation from "../../../Utils/useTranslation";
 import CustomModal from "../../CustomModal";
 
 import "./TicTacToe.scss";
+import { getInitialTTTSymbol, receiveTTTPos, requestInitialTTTSymbol, sendTTTPos, socketGenericCheck } from "../../../Utils/socketUtils";
+import { ITicTacToe } from "../../../Utils/customInterfaces";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../ReduxStore/appStore";
+import { clearBoard, setPlayerSymbols, setStartPlayer, updateBoard } from "../../../ReduxStore/Slices/tttGameSlice";
 
-const TicTacToe = () => {
-	const [squareVals, setSquareVals] = useState<number[]>(Array(9).fill(-1)); // can be just -1(for empty), 0 (for O), 1 (for X)
-	const [isTurn, setIsTurn] = useState(false); // false -> X, true -> O
-	const [gameFinishedandMsg, setGameFinishedandMsg] = useState("");
-	const t = useTranslation();
+const TicTacToe: FC<ITicTacToe> = ({ socket, setErrorMsg, personsAllowedInRoom }) => {
+    const [gameFinishedMsg, setGameFinishedMsg] = useState("");
+    const [startGameMsg, setStartGameMsg] = useState("");
+    const { board, startPlayer, playerSymbols } = useSelector((store: RootState) => store.tttGame);
 
-	const _isWinner = (arr: number[]) => {
-		for (let i = 0; i < winningPositions.length; i++) {
-			const tempArr = winningPositions[i]; // just an alias for ease
-			if (
-				arr[tempArr[0]] === 1 &&
-				arr[tempArr[1]] === 1 &&
-				arr[tempArr[2]] === 1
-			)
-				return "X";
-			else if (
-				arr[tempArr[0]] === 0 &&
-				arr[tempArr[1]] === 0 &&
-				arr[tempArr[2]] === 0
-			)
-				return "O";
-		}
+    const dispatch = useDispatch();
 
-		for (let i = 0; i < arr.length; i++) {
-			if (arr[i] === -1) {
-				return null; // game not yet finished
-			}
-		}
-		return drawMsg; // game draw
-	};
+    useEffect(() => {
+        if (!socket) return;
+        getInitialTTTSymbol(socket, (receivedMsg: string) => {
+            try {
+                const { currentPlayer, playerSymbols } = socketGenericCheck(receivedMsg);
+                dispatch(setStartPlayer(currentPlayer));
+                dispatch(setPlayerSymbols(playerSymbols));
+            } catch (err: any) {
+                setErrorMsg(err?.message);
+            }
+        })
 
-	const _setSquareVal = (modifiedIdx: number) => {
-		if (squareVals[modifiedIdx] === -1) {
-			isTurn
-				? setSquareVals((prevVals) =>
-						prevVals.map((ele, idx) => (modifiedIdx === idx ? 0 : ele))
-				  )
-				: setSquareVals((prevVals) =>
-						prevVals.map((ele, idx) => (modifiedIdx === idx ? 1 : ele))
-				  );
+        receiveTTTPos(socket, (receivedMsg: string) => {
+            try {
+                const data = socketGenericCheck(receivedMsg);
 
-			setIsTurn(!isTurn);
-		}
-	};
+                const { moveIdx, symbol, winner } = data;
+                dispatch(updateBoard({
+                    modifiedIdx: moveIdx,
+                    symbol
+                }))
 
-	const _onCloseModalCallback = () => {
-		setSquareVals(Array(9).fill(-1));
-		setGameFinishedandMsg("");
-	};
+                winner && setGameFinishedMsg(winner);
+            } catch (err: any) {
+				console.log(err?.message);
+                // setErrorMsg(err?.message);
+            }
+        })
+    }, [])
 
-	useEffect(() => {
-		const winningVal = _isWinner(squareVals);
-		if (winningVal) {
-			winningVal === drawMsg
-				? setGameFinishedandMsg(drawMsg)
-				: setGameFinishedandMsg(`${winningVal} ${t("HAS_WON")}`);
-		}
-	}, [squareVals, t]);
+    useEffect(() => {
+        let playerMsg = "";
+        Object.keys(playerSymbols).forEach(key => playerMsg += `${key} got ${playerSymbols[key]}. `);
+        startPlayer && (playerMsg += `${startPlayer} will start the game`);
 
-	return (
-		<section className="khelotsu-tictactoe">
-			{squareVals.map((ele, idx) => (
-				<div
-					className="khelotsu-tictactoe-square"
-					aria-label="tic tac toe square"
-					key={idx}
-					onClick={() => _setSquareVal(idx)}>
-					<span>{ele === -1 ? "" : ele === 0 ? "O" : "X"}</span>
-				</div>
-			))}
-			{gameFinishedandMsg && (
-				<CustomModal
-					headerName={gameFinishedandMsg}
-					isOpen={!!gameFinishedandMsg.length}
-					closeModal={_onCloseModalCallback}
-					isInputNeeded={false}
-					customStyle={{ width: "15rem", height: "4rem" }}
-				/>
-			)}
-		</section>
-	);
-};
+        setGameFinishedMsg("");
+        setStartGameMsg(playerMsg);
+        dispatch(clearBoard(null));
+
+    }, [startPlayer, playerSymbols])
+
+    const _startGame = () => {
+        try {
+            if (!socket) throw new Error("Socket not yet avaiable.");
+            requestInitialTTTSymbol(socket, JSON.stringify(personsAllowedInRoom));
+
+        } catch (err: any) {
+            setErrorMsg(err?.message);
+        }
+    }
+
+    const _positionClicked = (idx: number) => {
+        try {
+            if (!socket) throw new Error("Socket not yet avaiable.");
+            sendTTTPos(socket, JSON.stringify(idx));
+
+        } catch (err: any) {
+            setErrorMsg(err?.message);
+        }
+    }
+
+    const _onCloseModalStartGameCallback = () =>{
+        setStartGameMsg("");
+    }
+
+    const _onCloseModalFinishGameCallback = () => {
+        dispatch(clearBoard(""));
+        setGameFinishedMsg("");
+    }
+
+    return (
+        <section className="khelotsu-tictactoe">
+            <div className="khelotsu-tictactoe-game">
+                {
+                    board.map((ele, idx) =>
+                        <div className="khelotsu-tictactoe-game-square" aria-label="tic tac toe square" key={idx}
+                            onClick={() => _positionClicked(idx)}>
+                            <span>{ele === -1 ? "" : ele}</span>
+                        </div>
+                    )
+                }
+            </div>
+            <div className="khelotsu-tictactoe-start">
+                <button className="khelotsu-tictactoe-start-btn" onClick={_startGame}>Start</button>
+            </div>
+            {
+                startGameMsg && startGameMsg.length && (
+                    <CustomModal headerName={startGameMsg} isOpen={!!startGameMsg.length}
+                        closeModal={_onCloseModalStartGameCallback} isInputNeeded={false} 
+                        customStyle={{ "width": "15rem", "height": "4rem", "fontSize": "0.5rem" }} 
+                    />
+                )
+            }
+            {
+                gameFinishedMsg && gameFinishedMsg && (
+                    <CustomModal headerName={gameFinishedMsg} isOpen={!!gameFinishedMsg.length}
+                        closeModal={_onCloseModalFinishGameCallback} isInputNeeded={false} 
+                        customStyle={{ "width": "15rem", "height": "4rem"}} 
+                    />
+                )
+            }
+        </section>
+    )
+}
 
 export default TicTacToe;

@@ -55,3 +55,48 @@ export const receiveChatMessage = (socket: Socket, callback: (message: string) =
         throw new Error("Error while receiving chat message");
     }
 }
+
+export const socketGenericCheck = (receivedMsg: string) => {
+    const parsedMsg = JSON.parse(receivedMsg);
+    const { status, error, data } = parsedMsg;
+    if (status !== 200) {
+        throw new Error(error);
+    }
+
+    return data;
+}
+
+// message contains userName, type, pos No. -> 0 to 8
+export const sendTTTPos = (socket: Socket, message: string) => {
+    try {
+        socket.emit("send_ttt_pos", message);
+    } catch (err: any) {
+        throw new Error("Error while sending Tic Tac Toe position.");
+    }
+}
+
+// message contains pos No.
+export const receiveTTTPos = (socket: Socket, callback: (message: string) => void) => {
+    try {
+        socket.on("receive_ttt_pos", callback);
+    } catch (err: any) {
+        throw new Error("Error while receiving Tic Tac Toe position.");
+    }
+}
+
+// start of game -> send list of 2 players
+export const requestInitialTTTSymbol = (socket: Socket, message: string) => {
+    try {
+        socket.emit("request_ttt_symbol", message);
+    } catch (err: any) {
+        throw new Error("Error while requesting Tic Tac Toe symbol.");
+    }
+}
+
+export const getInitialTTTSymbol = (socket: Socket, callback: (message: string) => void) => {
+    try {
+        socket.on("receive_ttt_symbol", callback);
+    } catch (err: any) {
+        throw new Error("Error while receiving Tic Tac Toe symbol.");
+    }
+}
