@@ -100,3 +100,37 @@ export const getInitialTTTSymbol = (socket: Socket, callback: (message: string) 
         throw new Error("Error while receiving Tic Tac Toe symbol.");
     }
 }
+
+// start of game -> send list of 2 players
+export const requestInitialChessSymbol = (socket: Socket, message: string) => {
+    try {
+        socket.emit("request_chess_symbol", message);
+    } catch (err: any) {
+        throw new Error("Error while requesting Tic Tac Toe symbol.");
+    }
+}
+
+export const getInitialChessSymbol = (socket: Socket, callback: (message: string) => void) => {
+    try {
+        socket.on("receive_chess_symbol", callback);
+    } catch (err: any) {
+        throw new Error("Error while receiving Tic Tac Toe symbol.");
+    }
+}
+
+export const sendChessPos = (socket: Socket, message: string) => {
+    try {
+        socket.emit("send_chess_pos", message);
+    } catch (err: any) {
+        throw new Error("Error while sending Tic Tac Toe position.");
+    }
+}
+
+// message contains pos No.
+export const receiveChessPos = (socket: Socket, callback: (message: string) => void) => {
+    try {
+        socket.on("receive_chess_pos", callback);
+    } catch (err: any) {
+        throw new Error("Error while receiving Tic Tac Toe position.");
+    }
+}

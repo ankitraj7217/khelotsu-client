@@ -64,7 +64,7 @@ export interface IChat {
     socket: Socket | undefined;
 }
 
-export interface ITicTacToe {
+export interface IGame {
     setErrorMsg: React.Dispatch<React.SetStateAction<string>>;
     socket: Socket | undefined;
     personsAllowedInRoom: string[];

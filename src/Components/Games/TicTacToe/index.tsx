@@ -3,12 +3,12 @@ import CustomModal from "../../CustomModal";
 
 import "./TicTacToe.scss";
 import { getInitialTTTSymbol, receiveTTTPos, requestInitialTTTSymbol, sendTTTPos, socketGenericCheck } from "../../../Utils/socketUtils";
-import { ITicTacToe } from "../../../Utils/customInterfaces";
+import { IGame } from "../../../Utils/customInterfaces";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../ReduxStore/appStore";
 import { clearBoard, setPlayerSymbols, setStartPlayer, updateBoard } from "../../../ReduxStore/Slices/tttGameSlice";
 
-const TicTacToe: FC<ITicTacToe> = ({ socket, setErrorMsg, personsAllowedInRoom }) => {
+const TicTacToe: FC<IGame> = ({ socket, setErrorMsg, personsAllowedInRoom }) => {
 	const [gameFinishedMsg, setGameFinishedMsg] = useState("");
 	const [isNewGameStarted, setIsNewGameStarted] = useState(false);
 	const [startGameMsg, setStartGameMsg] = useState("");

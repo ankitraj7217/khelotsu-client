@@ -47,6 +47,7 @@ export const getPieceType = (type: String): "w" | "b" => {
     return lastIdxValue === "w" ? "w" : "b";
 }
 
+// if there is another piece on path
 export const isPieceOnPos = (arr2d: Array<Array<String>>, row: number, col: number) =>
     arr2d[row][col] !== "" && arr2d[row][col] !== ".";
 

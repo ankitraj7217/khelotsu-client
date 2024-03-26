@@ -3,13 +3,15 @@ import { configureStore } from "@reduxjs/toolkit";
 import loginReducer from "./Slices/loginSlice";
 import chatReducer from "./Slices/chatSlice";
 import tttGameReducer from "./Slices/tttGameSlice";
+import chessGameReducer from "./Slices/chessGameSlice";
 
 // Add slices here
 const appStore = configureStore({
     reducer: {
         login: loginReducer,
         chat: chatReducer,
-        tttGame: tttGameReducer
+        tttGame: tttGameReducer,
+        chessGame: chessGameReducer
     }
 });
 

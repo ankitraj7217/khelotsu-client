@@ -1,5 +1,5 @@
 import { lazy } from "react"
-import { IGameSectionComponent, ITicTacToe } from "../../Utils/customInterfaces";
+import { IGameSectionComponent } from "../../Utils/customInterfaces";
 
 const ChessComponent = lazy(() => import("../../Components/Games/Chess"));
 const TicTacToeComponent = lazy(() => import("../../Components/Games/TicTacToe"));
