@@ -66,6 +66,14 @@ export const socketGenericCheck = (receivedMsg: string) => {
     return data;
 }
 
+export const getCurrPersonsInRoom = (socket: Socket, callback: (message: string) => void) => {
+    try {
+        socket.on("receive_curr_persons_in_room", callback);
+    } catch (err: any) {
+        throw new Error("Error while receiving Tic Tac Toe position.");
+    }
+}
+
 // message contains userName, type, pos No. -> 0 to 8
 export const sendTTTPos = (socket: Socket, message: string) => {
     try {

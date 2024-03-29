@@ -69,3 +69,9 @@ export interface IGame {
     socket: Socket | undefined;
     personsAllowedInRoom: string[];
 }
+
+export interface IMedia {
+    socket: Socket | undefined;
+    currPersonsInRoom: string[];
+    setErrorMsg: React.Dispatch<React.SetStateAction<string>>;
+}

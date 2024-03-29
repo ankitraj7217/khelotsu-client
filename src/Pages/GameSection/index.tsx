@@ -10,15 +10,16 @@ import { currentlySupportedGames } from "../../Constants/temporaryValues";
 import GamesBoxDisplay from "../../Components/GamesBoxDisplay";
 import { createFuncWithNoParams, getCurrentDateTime, getURLParams, updateUrlParamsWithoutReload } from "../../Utils/genericUtils";
 import { ICustomChat, ISupportedGamesListProps } from "../../Utils/customInterfaces";
-import {  getGameComponents } from "./GameSection.gameloader";
+import { getGameComponents } from "./GameSection.gameloader";
 import "./GameSection.scss";
 import { useLocation, useNavigate } from "react-router-dom";
 import { personsAllowedInRoomDetails } from "../../Network/roomApiCalls";
 import CustomToast from "../../Components/CustomToast";
 import ChatDetails from "../../Components/ChatDetails";
-import { createSocket, receiveChatMessage } from "../../Utils/socketUtils";
+import { createSocket, getCurrPersonsInRoom, receiveChatMessage, socketGenericCheck } from "../../Utils/socketUtils";
 import { addChatToThread } from "../../ReduxStore/Slices/chatSlice";
 import { useDispatch } from "react-redux";
+import Media from "../../Components/Media";
 
 const GameSection = () => {
     const [isLeftDrawerOpen, setIsLeftDrawerOpen] = useState<boolean>(false);
@@ -26,6 +27,7 @@ const GameSection = () => {
     const [supportedGames, setSupportedGames] = useState<ISupportedGamesListProps[]>(currentlySupportedGames);
     const [currentGame, setCurrentGame] = useState<ISupportedGamesListProps>();
     const [personsAllowedInRoom, setPersonsAllowedInRoom] = useState<string[]>([]);
+    const [currPersonsInRoom, setCurrPersonsInRoom] = useState<string[]>([]);
     const [socket, setSocket] = useState<Socket>();
     const [errorMsg, setErrorMsg] = useState<string>("");
 
@@ -35,7 +37,7 @@ const GameSection = () => {
 
     useEffect(() => {
 
-        const initializeGameRoom = async() => {
+        const initializeGameRoom = async () => {
             try {
                 const urlParams = getURLParams();
                 const path = location.pathname.split('/');
@@ -44,9 +46,9 @@ const GameSection = () => {
                 const personsAllowed = await personsAllowedInRoomDetails({
                     roomName
                 })
-                
+
                 const allowedUserNames = personsAllowed?.data?.map((user: any) => user?.username)
-                
+
                 setPersonsAllowedInRoom(allowedUserNames);
 
                 if ("game" in urlParams) switchGame(urlParams["game"]);
@@ -54,7 +56,7 @@ const GameSection = () => {
             } catch (err: any) {
                 setErrorMsg(err?.message);
                 setTimeout(() => {
-                    navigate("/games", {replace: true});
+                    navigate("/games", { replace: true });
                 }, 4000);
             }
         }
@@ -70,11 +72,23 @@ const GameSection = () => {
             const socket = createSocket(roomName);
             setSocket(socket);
 
-            receiveChatMessage(socket, (message: string) => {
-                console.log("message incoming: ", message)
-                if (!message.length) return;
+            console.log("socket: ", socket)
+            getCurrPersonsInRoom(socket, (message: string) => {
+                try {
+                    console.log("New person joined: ", message)
+                    if (!message.length) return;
 
-                console.log("message: ", message)
+                    const data = socketGenericCheck(message);
+                    console.log("data of curr persons: ", data);
+                    setCurrPersonsInRoom([...data]);
+
+                } catch (err: any) {
+                    setErrorMsg(err?.message);
+                }
+            })
+
+            receiveChatMessage(socket, (message: string) => {
+                if (!message.length) return;
 
                 const msgParsed = JSON.parse(message);
 
@@ -146,7 +160,7 @@ const GameSection = () => {
 
                 <div className="khelotsu-game-section-game">
                     <Suspense fallback={<div>Loading...</div>}>
-                        {currentGame && getGameComponents({socket, setErrorMsg, personsAllowedInRoom})[currentGame?.id]}
+                        {currentGame && getGameComponents({ socket, setErrorMsg, personsAllowedInRoom })[currentGame?.id]}
                     </Suspense>
                 </div>
 
@@ -174,7 +188,7 @@ const GameSection = () => {
             </section>
 
             <section className="khelotsu-game-video-call">
-
+                <Media socket={socket} currPersonsInRoom={currPersonsInRoom} setErrorMsg={setErrorMsg} />
             </section>
         </section>
     )
