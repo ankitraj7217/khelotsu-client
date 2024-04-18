@@ -1,9 +1,90 @@
 .khelotsu-authentication {
-	background-image: url("../../Assets/Images/authentication-page-bg.jpg");
+	background: linear-gradient(45deg, #11ee72, #2962ff);
 	background-size: 100% 100%; /* Cover entire container */
 	background-position: center; /* Center the image */
 	width: 100vw; /* Full width of the viewport */
-	height: calc(100vh - 6rem);
+	height: calc(100vh - 5rem);
 	display: flex;
+	justify-content: center;
 	align-items: center;
-}
+	position: relative;
+  
+	&-wrapper {
+	  position: absolute;
+	  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+	  width: 31rem;
+	  height: 37rem;
+  
+	  &.sign-up {
+		transform: rotate(7deg);
+	  }
+  
+	  &.sign-in {
+		transform: rotate(0deg);
+	  }
+	}
+  
+	&.animate-signUp {
+	  .sign-in {
+		transform: rotate(7deg);
+		animation: animateRotate 0.7s ease-in-out forwards;
+		animation-delay: 0.3s;
+	  }
+  
+	  .sign-up {
+		animation: animateSignUp 1.5s ease-in-out forwards;
+	  }
+	}
+  
+	&.animate-signIn {
+	  .sign-in {
+		animation: animateSignIn 1.5s ease-in-out forwards;
+	  }
+  
+	  .sign-up {
+		animation: animateRotate 0.7s ease-in-out forwards;
+		animation-delay: 0.3s;
+	  }
+	}
+  
+	@keyframes animateSignIn {
+	  0% {
+		transform: translateX(0);
+	  }
+  
+	  50% {
+		transform: translateX(-500px);
+	  }
+  
+	  100% {
+		transform: translateX(0) rotate(7deg);
+	  }
+	}
+  
+	@keyframes animateRotate {
+	  0% {
+		transform: rotate(7deg);
+	  }
+  
+	  100% {
+		transform: rotate(0);
+		z-index: 1;
+	  }
+	}
+  
+	@keyframes animateSignUp {
+	  0% {
+		transform: translateX(0);
+		z-index: 1;
+	  }
+  
+	  50% {
+		transform: translateX(500px);
+	  }
+  
+	  100% {
+		transform: translateX(0) rotate(7deg);
+	  }
+	}
+  }
+  

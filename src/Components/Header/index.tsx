@@ -1,78 +1,106 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import HeaderIcon from "../../Assets/Images/header-icon.jpg";
 import useTranslation from "../../Utils/useTranslation";
 import { RootState } from "../../ReduxStore/appStore";
-import { removeUser } from "../../ReduxStore/Slices/loginSlice";
-import { deleteAllValuesFromCookies } from "../../Network/auth";
-import { useNavigate } from "react-router-dom";
+import BackIcon from "../../Assets/Icons/back-icon.png";
 
 import "./Header.scss";
 import { logoutUser } from "../../Network/userApiCalls";
 import { deleteAllDataAndReloead } from "../../Utils/genericUtils";
-
+import { useLocation, useMatch, useNavigate } from "react-router-dom";
 
 const Header = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [isLogoutDropdownOpen, setIsLogoutDropdownOpen] =
+    useState<boolean>(false);
+  const userName = useSelector((store: RootState) => store.login.userName);
+  const t = useTranslation();
 
-    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-    const [isLogoutDropdownOpen, setIsLogoutDropdownOpen] = useState<boolean>(false);
-    const userName = useSelector((store: RootState) => store.login.userName);
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const t = useTranslation();
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const isRPAuth = pathname === "" || pathname === "/" || pathname === "/auth"; // RP -> Relative Path
 
-    const _openLogoutDropdown = () => {
-        setIsLogoutDropdownOpen(!isLogoutDropdownOpen);
+  const _openLogoutDropdown = () => {
+    setIsLogoutDropdownOpen(!isLogoutDropdownOpen);
+  };
+
+  const _logoutUser = async () => {
+    try {
+      deleteAllDataAndReloead();
+      setIsLogoutDropdownOpen(!isLogoutDropdownOpen);
+      await logoutUser();
+    } catch (err) {
+      console.log(err);
     }
+  };
 
-    const _logoutUser = async() => {
-        try {
-            deleteAllDataAndReloead();
-            setIsLogoutDropdownOpen(!isLogoutDropdownOpen);
-            await logoutUser();
-        } catch (err) {
-            console.log(err); 
-        }
+  const _onBackClick = () => {
+    navigate(-1);
+  };
+
+  useEffect(() => {
+    if (userName) {
+      setIsLoggedIn(true);
     }
+  }, [userName]);
 
-    useEffect(() => {
-        if (userName) {
-            setIsLoggedIn(true);
-        }
-    }, [userName])
-
-    return (
-        <header className="khelotsu-header">
-            <section className="khelotsu-header-left">
-                <img src={HeaderIcon} alt="" className="khelotsu-header-left-icon" />
-            </section>
-            <section className="khelotsu-header-name">
-                {t("KHELOTSU")}
-            </section>
-            <section className="khelotsu-header-right">
-                {/* either login icon or profile icon clicking on which will show logout icon */}
-                {
-                    !isLoggedIn ? (
-                        <div className="khelotsu-header-right-login" aria-label="Click to Login">
-                            {t("LOGIN")}
-                        </div>
-                    ) : (
-                        <div className="khelotsu-header-right-logout" aria-label="Click to see option to logout">
-                            <img src={HeaderIcon} alt="Profile Icon" className="khelotsu-header-right-logout-icon" onClick={_openLogoutDropdown} />
-                            {
-                                isLogoutDropdownOpen && <section className="khelotsu-header-right-logout-dropdown">
-                                    <div className="khelotsu-header-right-logout-dropdown__logout" aria-label="Click to logout"
-                                        onClick={_logoutUser}>
-                                        {t("LOGOUT")}
-                                    </div>
-                                </section>
-                            }
-                        </div>
-                    )
-                }
-            </section>
-        </header>
-    )
-}
+  return (
+    <header
+      className="khelotsu-header"
+      style={{ justifyContent: isRPAuth ? "center" : "space-between" }}
+    >
+      {isLoggedIn && (
+        <section className="khelotsu-header-left">
+          <img
+            src={BackIcon}
+            alt=""
+            className="khelotsu-header-left-icon"
+            onClick={_onBackClick}
+          />
+        </section>
+      )}
+      <section className="khelotsu-header-name">
+        <h3>{t("KHELOTSU")}</h3>
+      </section>
+      <section className="khelotsu-header-right">
+        {/* either login icon or profile icon clicking on which will show logout icon */}
+        {!isLoggedIn ? (
+          !isRPAuth && (
+            <div
+              className="khelotsu-header-right-login"
+              aria-label="Click to Login"
+            >
+              {t("LOGIN")}
+            </div>
+          )
+        ) : (
+          <div
+            className="khelotsu-header-right-logout"
+            aria-label="Click to see option to logout"
+          >
+            <img
+              src={HeaderIcon}
+              alt="Profile Icon"
+              className="khelotsu-header-right-logout-icon"
+              onClick={_openLogoutDropdown}
+            />
+            {isLogoutDropdownOpen && (
+              <section className="khelotsu-header-right-logout-dropdown">
+                <div
+                  className="khelotsu-header-right-logout-dropdown__logout"
+                  aria-label="Click to logout"
+                  onClick={_logoutUser}
+                >
+                  {t("LOGOUT")}
+                </div>
+              </section>
+            )}
+          </div>
+        )}
+      </section>
+    </header>
+  );
+};
 
 export default Header;

@@ -1,7 +1,9 @@
 .chess {
+    height: 100%;
+
     &-game {
         width: 28rem;
-        height: 28rem;
+        height: 90%;
         position: relative;
         display: flex;
         justify-content: center;
@@ -135,6 +137,7 @@
         margin: 1rem;
         
         &-btn {
+            font-size: 12px;
             cursor: pointer;
         }
     }

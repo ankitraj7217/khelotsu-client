@@ -1,7 +1,7 @@
 .media {
     position: absolute;
     width: 50%;
-    height: 25vh;
+    height: inherit;
     left: 50%;
     bottom: 0%;
     transform: translate(-50%);
@@ -9,7 +9,7 @@
     &-video-call {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        width: 100%;
+        width: 95%;
         height: 80%;
         padding: 0.5rem;
         border: 1px solid blue;

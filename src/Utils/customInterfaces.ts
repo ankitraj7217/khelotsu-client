@@ -6,7 +6,7 @@ export interface ITranslationData {
 }
 
 export interface IParentSetProps {
-    setValue: React.Dispatch<React.SetStateAction<boolean>>;
+    setValue: React.Dispatch<React.SetStateAction<boolean | undefined>>;
 }
 
 export interface ISupportedGamesListProps {
@@ -42,6 +42,7 @@ export interface ICustomChat {
 export interface ICustomToastProps {
     color: string;
     msg: string;
+    isTransformAtParent?: boolean;
     setErrorMsg: React.Dispatch<React.SetStateAction<string>>;
 }
 

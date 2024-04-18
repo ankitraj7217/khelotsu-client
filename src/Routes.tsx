@@ -5,6 +5,7 @@ import Authentication from "./Pages/Authentication";
 import GamesList from "./Components/GamesList";
 import GameSection from "./Pages/GameSection";
 import PrivateRoute from "./PrivateRoute";
+import Shimmer from "./Components/Shimmer";
 
 const appRouter = createBrowserRouter([
     {
@@ -26,6 +27,10 @@ const appRouter = createBrowserRouter([
             {
                 path: "games/:name",
                 element: <PrivateRoute> <GameSection /> </PrivateRoute>
+            },
+            {
+                path: "shimmer",
+                element: <Shimmer />
             }
         ]
     }

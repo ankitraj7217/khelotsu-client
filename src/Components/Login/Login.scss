@@ -1,72 +1,79 @@
 $login-div-width: 20rem;
 
 .khelotsu-login {
-	width: $login-div-width;
-	height: fit-content;
-	border-radius: 1rem;
-	padding: 4rem;
-	background-color: white;
-	margin-left: auto;
-	margin-right: 8rem;
+  width: $login-div-width;
+  width: inherit;
+  height: inherit;
+  border-radius: 1rem;
+  padding: 4rem;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
-	&-form {
-		width: calc($login-div-width - 2rem);
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
+  &-form {
+    width: calc($login-div-width - 2rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
-		&-heading {
-			margin: 0 auto;
-			font-size: 1.5rem;
-			margin-bottom: 2.5rem;
-		}
+    &-heading {
+      margin: 0 auto;
+      font-size: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
 
-		&-component {
-			margin-bottom: 2rem;
-			display: flex;
+    &-component {
+      margin-bottom: 2rem;
+      display: flex;
 
-			&-label {
-				margin-right: 2rem;
-				width: 5rem;
-			}
+      &-label {
+        margin-right: 2rem;
+        width: 5rem;
+      }
 
-			&-input {
-				border: none;
-				border-bottom: 1px solid black;
-				width: 10rem;
+      &-input {
+        border: none;
+        border-bottom: 1px solid black;
+        width: 10rem;
 
-				&:hover,
-				&:focus {
-					outline: none;
-					border: none;
-					border-bottom: 1px solid black;
-				}
-			}
-		}
+        &:hover,
+        &:focus {
+          outline: none;
+          border: none;
+          border-bottom: 1px solid black;
+        }
+      }
+    }
 
-		&-submit {
-			width: 4rem;
-			height: 2rem;
-			cursor: pointer;
-			margin: 0 auto;
-		}
-	}
+    &-submit {
+      width: 8rem;
+      height: 2.5rem;
+      cursor: pointer;
+      margin: 0 auto;
+    }
+  }
 
-	&-signup {
-		display: flex;
-		justify-content: center;
-		margin-right: 2rem;
-		margin-top: 2.5rem;
-		font-size: 0.75rem;
+  &-signup {
+    display: flex;
+    justify-content: center;
+    margin-right: 2rem;
+    margin-top: 2.5rem;
+    font-size: 1rem;
 
-		&-not {
-			color: red;
-		}
+    &-not {
+      color: red;
+    }
 
-		&-msg {
-			cursor: pointer;
-			text-decoration: underline;
-			color: blue;
-		}
-	}
+    &-msg {
+      cursor: pointer;
+      text-decoration: none;
+      color: blue;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
 }

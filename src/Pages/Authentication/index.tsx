@@ -7,29 +7,35 @@ import { getValueFromCookies } from "../../Network/auth";
 import { useNavigate } from "react-router-dom";
 
 const Authentication = () => {
+  const [isLogin, setIsLogin] = useState<boolean | undefined>();
+  const navigate = useNavigate();
 
-    const [isLogin, setIsLogin] = useState<boolean>(false);
-    const navigate = useNavigate();
+  useEffect(() => {
+    const userData = getValueFromCookies("userData");
 
-    useEffect(() => {
-        const userData = getValueFromCookies("userData");
+    if (userData) {
+      navigate("/games");
+    }
+  }, []);
 
-        if (userData) {
-            navigate("/games");
-        }
-    }, [])
-
-    return (
-        <section className="khelotsu-authentication">
-            {
-                isLogin ? (
-                    <Login setValue={setIsLogin} />
-                ) : (
-                    <SignUp setValue={setIsLogin} />
-                )
-            }
-        </section>
-    )
-}
+  return (
+    <section
+      className={`khelotsu-authentication ${
+        isLogin === true
+          ? "animate-signUp"
+          : isLogin === false
+          ? "animate-signIn"
+          : ""
+      }`}
+    >
+      <div className="khelotsu-authentication-wrapper sign-up">
+        <SignUp setValue={setIsLogin} />
+      </div>
+      <div className="khelotsu-authentication-wrapper sign-in">
+        <Login setValue={setIsLogin} />
+      </div>
+    </section>
+  );
+};
 
 export default Authentication;
