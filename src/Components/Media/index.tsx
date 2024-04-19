@@ -10,7 +10,7 @@ import VideoOnState from "../../Assets/Icons/video-on-state.png";
 import VideoOffState from "../../Assets/Icons/video-off-state.png";
 import AudioOnState from "../../Assets/Icons/audio-on-state.png";
 import AudioOffState from "../../Assets/Icons/audio-off-state.png";
-import CallEndIcon from "../../Assets/Icons/call-end-state.png";
+import CallEndIcon from "../../Assets/Icons/end-call-state.png";
 
 import "./Media.scss";
 import { useNavigate } from "react-router-dom";
