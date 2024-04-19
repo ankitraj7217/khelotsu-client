@@ -1,4 +1,4 @@
-export const env = "https://turbo-doodle-9qjpg6ww4r5fprxr-8000.app.github.dev";
+export const env = "https://obscure-space-parakeet-7rpgj7ww6q62pqq-8000.app.github.dev";
 export const apiEnv = env + "/api/v1";
 
 export const userApiEnv = apiEnv + "/users";
