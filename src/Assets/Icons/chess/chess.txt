@@ -33,3 +33,6 @@ pb
 
 pw
 <a href="https://www.flaticon.com/free-icons/pawn" title="pawn icons">Pawn icons created by Pixel perfect - Flaticon</a>
+
+back-icon
+<a href="https://www.flaticon.com/free-icons/left-arrow" title="left arrow icons">Left arrow icons created by Freepik - Flaticon</a>
