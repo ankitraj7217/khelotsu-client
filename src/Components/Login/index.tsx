@@ -16,6 +16,7 @@ import CustomButton from "../CustomButton";
 
 const Login: FC<IParentSetProps> = ({ setValue }) => {
   const [errorMsg, setErrorMsg] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const usernameRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
@@ -31,6 +32,8 @@ const Login: FC<IParentSetProps> = ({ setValue }) => {
 
     const userName = usernameRef.current?.value || "";
     const password = passwordRef.current?.value || "";
+
+    setIsLoading(true);
 
     try {
       await userLoginSchema.validate(
@@ -70,6 +73,8 @@ const Login: FC<IParentSetProps> = ({ setValue }) => {
       } else {
         setErrorMsg(error?.message);
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -107,7 +112,7 @@ const Login: FC<IParentSetProps> = ({ setValue }) => {
           />
         </div>
         <div className="khelotsu-login-form-submit">
-          <CustomButton txt="submit" onClick={_onLoginFormSubmit} />
+          <CustomButton txt="submit" onClick={_onLoginFormSubmit} isLoader={isLoading} />
         </div>
       </form>
 

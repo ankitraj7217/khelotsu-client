@@ -33,7 +33,7 @@ export const deleteAllDataAndReloead = () => {
         setTimeout(() => {
             window.location.href = "/auth";
             window.location.reload();
-        }, 4000)
+        }, 0)
     }
 }
 

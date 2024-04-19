@@ -1,0 +1,32 @@
+.modal-loader {
+    position: sticky;
+    top: 0;
+    left: 0;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    width: fit-content;
+    height: fit-content;
+  
+    //   pointer-events: none;
+  
+    .loading {
+      background: conic-gradient(#0000, 10%, #ff5f6d);
+      border-radius: 50%;
+      mask: radial-gradient(farthest-side, #0000 calc(100% - 20px), #000 0);
+      -webkit-mask: radial-gradient(
+        farthest-side,
+        #0000 calc(100% - 20px),
+        #000 0
+      );
+      animation: animate 1s infinite linear;
+    }
+    @keyframes animate {
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  }
+  

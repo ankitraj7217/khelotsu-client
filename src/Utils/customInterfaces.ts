@@ -39,6 +39,10 @@ export interface ICustomChat {
     messageTxt: string;
 }
 
+export interface IHeader {
+    setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
 export interface ICustomToastProps {
     color: string;
     msg: string;

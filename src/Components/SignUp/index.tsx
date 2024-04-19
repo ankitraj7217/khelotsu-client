@@ -17,6 +17,7 @@ import CustomButton from "../CustomButton";
 
 const SignUp: FC<IParentSetProps> = ({ setValue }) => {
   const [errorMsg, setErrorMsg] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const usernameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -36,6 +37,7 @@ const SignUp: FC<IParentSetProps> = ({ setValue }) => {
     const email = emailRef.current?.value || "";
     const password = passwordRef.current?.value || "";
     const confirmPassword = confirmPasswordRef.current?.value || "";
+    setIsLoading(true);
 
     try {
       await userSignUpSchema.validate(
@@ -78,6 +80,8 @@ const SignUp: FC<IParentSetProps> = ({ setValue }) => {
       } else {
         setErrorMsg(error?.message);
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -131,7 +135,7 @@ const SignUp: FC<IParentSetProps> = ({ setValue }) => {
           />
         </div>
         <div className="khelotsu-signup-form-submit">
-          <CustomButton txt="submit" onClick={_signUpFormSubmit} />
+          <CustomButton txt="submit" onClick={_signUpFormSubmit} isLoader={isLoading} />
         </div>
       </form>
 

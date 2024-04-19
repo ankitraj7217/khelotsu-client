@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import { ICustomToastProps } from "../../Utils/customInterfaces";
 
 import "./CustomToast.scss";
@@ -37,6 +37,26 @@ const CustomToast: FC<ICustomToastProps> = ({
     setShowToast(false);
   };
 
+  const calculateValue = useCallback(() => {
+    const innerHeight = window.innerHeight;
+    let val = -10;
+    if (innerHeight >= 1000) {
+      val = -9;
+    } else if (innerHeight >= 940) {
+      val = -8;
+    } else if (innerHeight >= 900) {
+      val = -7;
+    } else if (innerHeight >= 850) {
+      val = -5.5;
+    } else {
+      val = -5;
+    }
+
+    return [val.toString(), (val - 10).toString()];
+  }, [window.innerHeight]);
+
+  const showBtmValue = calculateValue();
+
   return (
     <section
       className={`khelotsu-custom-toast khelotsu-custom-toast${
@@ -44,7 +64,11 @@ const CustomToast: FC<ICustomToastProps> = ({
       }`}
       style={{
         borderColor: color,
-        bottom: isTransformAtParent ? (showToast ? "-9rem" : "-20rem") : "",
+        bottom: isTransformAtParent
+          ? showToast
+            ? `${showBtmValue[0]}rem`
+            : `${showBtmValue[1]}rem`
+          : "",
       }}
     >
       {msg}

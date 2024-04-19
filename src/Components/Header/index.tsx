@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import HeaderIcon from "../../Assets/Images/header-icon.jpg";
 import useTranslation from "../../Utils/useTranslation";
@@ -8,9 +8,10 @@ import BackIcon from "../../Assets/Icons/back-icon.png";
 import "./Header.scss";
 import { logoutUser } from "../../Network/userApiCalls";
 import { deleteAllDataAndReloead } from "../../Utils/genericUtils";
-import { useLocation, useMatch, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { IHeader } from "../../Utils/customInterfaces";
 
-const Header = () => {
+const Header: FC<IHeader> = ({ setIsLoading }) => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [isLogoutDropdownOpen, setIsLogoutDropdownOpen] =
     useState<boolean>(false);
@@ -26,12 +27,15 @@ const Header = () => {
   };
 
   const _logoutUser = async () => {
+    setIsLoading(true);
     try {
       deleteAllDataAndReloead();
       setIsLogoutDropdownOpen(!isLogoutDropdownOpen);
       await logoutUser();
     } catch (err) {
       console.log(err);
+    } finally {
+      setIsLoading(false);
     }
   };
 

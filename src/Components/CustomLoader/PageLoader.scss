@@ -1,0 +1,32 @@
+.page-loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    position: absolute;
+    top: 5rem;
+    width: 105vw; /* Full width of the viewport */
+    height: calc(100vh - 5rem);
+    background: #1f272d;
+    z-index: 2;
+  
+    span {
+      width: 4vw;
+      height: 20vh;
+      margin: auto;
+      animation: animateLoader 1s infinite ease-in-out;
+    }
+  
+    @keyframes animateLoader {
+      0%,
+      40%,
+      100% {
+        transform: scale(0.05);
+      }
+  
+      20% {
+        transform: scale(1);
+      }
+    }
+  }
+  

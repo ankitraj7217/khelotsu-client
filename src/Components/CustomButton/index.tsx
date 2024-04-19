@@ -1,16 +1,32 @@
-import React, { FC, MouseEvent } from "react";
+import React, { FC } from "react";
 import "./CustomButton.scss";
+import ModalLoader from "../CustomLoader/ModalLoader";
 
 interface ICustomButtonProps {
   txt: string;
+  isLoader?: boolean;
   onClick: (event: any) => void;
 }
 
-const CustomButton: FC<ICustomButtonProps> = ({ txt, onClick }) => {
+const CustomButton: FC<ICustomButtonProps> = ({
+  txt,
+  isLoader = false,
+  onClick,
+}) => {
   return (
-    <button className="custom-button" onClick={onClick}>
+    <button
+      className="custom-button"
+      onClick={onClick}
+      style={{ justifyContent: isLoader ? "space-between" : "center" }}
+    >
       {txt}
-      <span className="ripple"></span>
+      {isLoader ? (
+        <div className="loader">
+          <ModalLoader loaderHt="1rem" loaderWd="1rem" />
+        </div>
+      ) : (
+        <></>
+      )}
     </button>
   );
 };
