@@ -1,6 +1,6 @@
 export const env = process.env.BASE_URL_ENV
   ? process.env.BASE_URL_ENV
-  : "https://obscure-space-parakeet-7rpgj7ww6q62pqq-8000.app.github.dev";
+  : "https://khelotsu-server.onrender.com";
 export const apiEnv = env + "/api/v1";
 
 export const userApiEnv = apiEnv + "/users";
