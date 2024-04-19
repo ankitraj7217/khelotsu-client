@@ -171,38 +171,60 @@ export class WebRTCConnection {
 
     async toggleVideoConnection(enableVideo: boolean, currUserName: string) {
         try {
-            if (this.localStream) {
-                // If localStream is already open, close it
-                this.localStream.getVideoTracks().forEach((track: any) => {
-                    track.enabled = !track.enabled; // Toggle track's enabled property
+            const vidTrack = this.localStream ? this.localStream.getVideoTracks()[0] : null;
+            const toggle = enableVideo;
+    
+            if (vidTrack && toggle && vidTrack.readyState && vidTrack.readyState === "ended") {
+                // If video track exists, is toggled on, and its readyState is "ended"
+                const newVideoStreamGrab = await navigator.mediaDevices.getUserMedia({
+                    video: true
                 });
-            } else {
-                // If localStream is not open, open it
-                await this.openVideoAudio(currUserName);
+                if (this.localStream && this.localStream.getVideoTracks().length > 0) {
+                    // Remove the old video track
+                    this.localStream.removeTrack(this.localStream.getVideoTracks()[0]);
+                }
+                // Add the new video track
+                this.localStream.addTrack(newVideoStreamGrab.getVideoTracks()[0]);
+            } else if (vidTrack) {
+                // If video track exists and is toggled off or not in "ended" state, stop it
+                vidTrack.stop();
             }
-
+    
             this.peerConnection.forEach(({ _, peerConnection }) => {
                 const senders = peerConnection.getSenders().filter((sender: any) => sender?.track?.kind === 'video');
-
+    
                 for (const sender of senders) {
                     if (sender.track) {
                         sender.track.enabled = enableVideo;
                     }
                 }
-            })
+            });
         } catch (error: any) {
             console.log("Error toggling video transmission: ", error);
             throw new Error(error?.message);
         }
     }
+    
 
     async toggleAudioConnection(enableAudio: boolean) {
         try {
-            // Toggle audio tracks in the local stream
-            if (this.localStream) {
-                this.localStream.getAudioTracks().forEach((track: MediaStreamTrack) => {
-                    track.enabled = enableAudio;
+            const audioTrack = this.localStream ? this.localStream.getAudioTracks()[0] : null;
+            const toggle = enableAudio;
+    
+            if (audioTrack && toggle && audioTrack.readyState && audioTrack.readyState === "ended") {
+                // If audio track exists, is toggled on, and its readyState is "ended"
+                const newAudioStreamGrab = await navigator.mediaDevices.getUserMedia({
+                    audio: true
                 });
+                if (this.localStream && this.localStream.getAudioTracks().length > 0) {
+                    // Remove the old audio track
+                    this.localStream.removeTrack(this.localStream.getAudioTracks()[0]);
+                }
+                // Add the new audio track
+                this.localStream.addTrack(newAudioStreamGrab.getAudioTracks()[0]);
+            } else if (audioTrack) {
+                // If audio track exists and is toggled off or not in "ended" state, stop it
+                audioTrack.stop();
             }
     
             // Toggle audio tracks for each peer connection
@@ -219,5 +241,6 @@ export class WebRTCConnection {
             throw new Error(error?.message);
         }
     }
+    
     
 }
