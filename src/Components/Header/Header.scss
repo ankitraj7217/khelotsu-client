@@ -3,13 +3,16 @@
 	height: 5rem;
 	display: flex;
 	justify-content: space-between;
-	padding: 0.5rem 4rem 0.5rem 1.5rem;
-	background-color: #edb098;
+	background: linear-gradient(45deg, transparent, black);
+  
+	position: fixed;
+	width: 100%;
   
 	&-left {
-	  width: 7rem;
+	  width: 4rem;
 	  height: 4rem;
 	  margin-top: 1rem;
+	  margin-left: 1rem;
   
 	  img {
 		width: 3rem;
@@ -20,13 +23,15 @@
 	}
   
 	&-name {
-	  color: #3017e9;
+	  color: aliceblue;
 	  font-size: 2.5rem;
 	}
   
 	&-right {
 	  width: 4rem;
 	  height: 2.5rem;
+	  display: flex;
+	  align-items: center;
   
 	  &-login {
 		display: flex;
@@ -60,7 +65,7 @@
 		&-dropdown {
 		  position: absolute; // Position dropdown absolutely
 		  top: 2.25rem; // Adjust top position as needed
-		  left: 0; // Align with profile icon
+		  right: -1.25rem;
 		  background-color: #fff; // Background color of dropdown
 		  border: 1px solid #ddd; // Border color
 		  border-radius: 0.5rem; // Border radius
@@ -77,6 +82,14 @@
 			}
 		  }
 		}
+	  }
+	}
+  }
+  
+  @media only screen and (max-width: 480px) {
+	.khelotsu-header {
+	  &-name {
+		font-size: 1.5rem;
 	  }
 	}
   }

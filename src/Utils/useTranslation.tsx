@@ -7,13 +7,15 @@ const useTranslation = () => {
 
 	const fetchTranslationValue = async () => {
 		try {
-			const API_URL = "";
-			const response = await fetch(API_URL);
-			const data: ITranslationData = await response.json();
+			// const API_URL = "";
+			// const response = await fetch(API_URL);
+			// const data: ITranslationData = await response.json();
 
 			// Update the translations state
-			setTranslatedDict(data);
+			// setTranslatedDict(data);
 		} catch (e) {
+			console.error("Error while calling translation API");
+		} finally {
 			setTranslatedDict(englishTranslatedValues);
 		}
 	};

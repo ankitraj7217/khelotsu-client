@@ -1,23 +1,55 @@
-.khelotsu-frontend-games-list {
-    padding: 1rem;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-    background-image: url('../../Assets/Images/games-dashboard-bg.jpg');
-    background-size: 100% 100%; /* Cover entire container */
-    background-position: center; /* Center the image */
-    width: 100vw; /* Full width of the viewport */
-    height: calc(100vh - 5rem);
+@import "../../Utils/Scss/variables.scss";
 
-    
-    &-game {
-        margin: 0rem 2rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border: 1rem solid blue;
-        font-size: 4rem;
-        text-align: center;
-        cursor: pointer;
-    }
+.khelotsu-frontend-games-list {
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background: linear-gradient(45deg, black, transparent);
+  height: calc(100vh - 5rem);
+
+  &-game {
+    margin: 0rem 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
+    text-align: center;
+    cursor: pointer;
+
+    width: 25vw;
+    height: 25vw;
+  }
 }
+
+$mobileBreakpoint: map-get($deviceBpPx, mobile) px;
+$tabletBreakpoint: map-get($deviceBpPx, tablet) px;
+
+  
+  @media only screen and (max-width: 768px) {
+    .khelotsu-frontend-games-list {
+      overflow: scroll;
+      font-size: 2rem;
+  
+      &-game {
+        width: 65vw;
+        height: 65vw;
+        margin: 0rem;
+      }
+    }
+  }
+
+  // Media queries for responsiveness
+@media only screen and (max-width: 480px) {
+    .khelotsu-frontend-games-list {
+      overflow: scroll;
+      font-size: 2rem;
+  
+      &-game {
+        width: 85vw;
+        height: 85vw;
+        margin: 0rem;
+      }
+    }
+  }

@@ -1,14 +1,12 @@
-$signup-div-width: 25rem;
-
 .khelotsu-signup {
-  width: inherit;
+  width: auto;
   height: inherit;
   border-radius: 1rem;
   padding: 4rem;
   background-color: white;
 
   &-form {
-    width: calc($signup-div-width - 2rem);
+    width: 90%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -22,24 +20,6 @@ $signup-div-width: 25rem;
     &-component {
       margin-bottom: 2rem;
       display: flex;
-
-      &-label {
-        margin-right: 2rem;
-        width: 10rem;
-      }
-
-      &-input {
-        border: none;
-        border-bottom: 1px solid black;
-        width: 10rem;
-
-        &:hover,
-        &:focus {
-          outline: none;
-          border: none;
-          border-bottom: 1px solid black;
-        }
-      }
     }
 
     &-submit {
@@ -70,5 +50,14 @@ $signup-div-width: 25rem;
         text-decoration: underline;
       }
     }
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .khelotsu-signup { 
+    padding: 4rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 }

@@ -17,11 +17,11 @@ const CustomToast: FC<ICustomToastProps> = ({
 
     const timer1 = setTimeout(() => {
       setShowToast(false);
-    }, 2500);
+    }, 6500);
 
     const timer2 = setTimeout(() => {
       setErrorMsg("");
-    }, 3500);
+    }, 7500);
 
     return () => {
       clearTimeout(timer1);
@@ -49,7 +49,7 @@ const CustomToast: FC<ICustomToastProps> = ({
     } else if (innerHeight >= 850) {
       val = -5.5;
     } else {
-      val = -5;
+      val = -2;
     }
 
     return [val.toString(), (val - 10).toString()];

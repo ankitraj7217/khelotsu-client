@@ -67,42 +67,42 @@ const Header: FC<IHeader> = ({ setIsLoading }) => {
       <section className="khelotsu-header-name">
         <h3>{t("KHELOTSU")}</h3>
       </section>
-      <section className="khelotsu-header-right">
-        {/* either login icon or profile icon clicking on which will show logout icon */}
-        {!isLoggedIn ? (
-          !isRPAuth && (
+      {!isRPAuth && (
+        <section className="khelotsu-header-right">
+          {/* either login icon or profile icon clicking on which will show logout icon */}
+          {!isLoggedIn ? (
             <div
               className="khelotsu-header-right-login"
               aria-label="Click to Login"
             >
               {t("LOGIN")}
             </div>
-          )
-        ) : (
-          <div
-            className="khelotsu-header-right-logout"
-            aria-label="Click to see option to logout"
-          >
-            <img
-              src={HeaderIcon}
-              alt="Profile Icon"
-              className="khelotsu-header-right-logout-icon"
-              onClick={_openLogoutDropdown}
-            />
-            {isLogoutDropdownOpen && (
-              <section className="khelotsu-header-right-logout-dropdown">
-                <div
-                  className="khelotsu-header-right-logout-dropdown__logout"
-                  aria-label="Click to logout"
-                  onClick={_logoutUser}
-                >
-                  {t("LOGOUT")}
-                </div>
-              </section>
-            )}
-          </div>
-        )}
-      </section>
+          ) : (
+            <div
+              className="khelotsu-header-right-logout"
+              aria-label="Click to see option to logout"
+            >
+              <img
+                src={HeaderIcon}
+                alt="Profile Icon"
+                className="khelotsu-header-right-logout-icon"
+                onClick={_openLogoutDropdown}
+              />
+              {isLogoutDropdownOpen && (
+                <section className="khelotsu-header-right-logout-dropdown">
+                  <div
+                    className="khelotsu-header-right-logout-dropdown__logout"
+                    aria-label="Click to logout"
+                    onClick={_logoutUser}
+                  >
+                    {t("LOGOUT")}
+                  </div>
+                </section>
+              )}
+            </div>
+          )}
+        </section>
+      )}
     </header>
   );
 };

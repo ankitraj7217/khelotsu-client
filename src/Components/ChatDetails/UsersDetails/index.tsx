@@ -22,6 +22,7 @@ const PeopleDetails: FC<IRoomUsers> = ({ names, setErrorMsg }) => {
   const [usersInRoom, setUsersInRoom] = useState<string[]>(names);
   const [userAddedMessage, setUserAddedMessage] = useState<string>("");
   const [userNameAddInput, setUserNameAddInput] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const _handleUserNameInputChange = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -33,6 +34,7 @@ const PeopleDetails: FC<IRoomUsers> = ({ names, setErrorMsg }) => {
     e.preventDefault();
 
     try {
+      setIsLoading(true);
       const path = location.pathname.split("/");
       const roomName = path[path.length - 1];
 
@@ -53,6 +55,8 @@ const PeopleDetails: FC<IRoomUsers> = ({ names, setErrorMsg }) => {
       setTimeout(() => setUserAddedMessage(""), 4000);
     } catch (error: any) {
       setErrorMsg(error?.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -118,7 +122,7 @@ const PeopleDetails: FC<IRoomUsers> = ({ names, setErrorMsg }) => {
             />
           </div>
           <div className="users-details-add-user-form-submit">
-            <CustomButton txt="Add" onClick={_onAddUser} />
+            <CustomButton txt="Add" onClick={_onAddUser} isLoader={isLoading} />
           </div>
         </form>
         <div className="user-details-add-user-msg">{userAddedMessage}</div>

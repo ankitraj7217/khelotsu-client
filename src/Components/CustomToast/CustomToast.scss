@@ -1,74 +1,73 @@
 // love hate relationship of position:fixed and transform at parent
 .khelotsu-custom-toast {
-    position: fixed;
-    bottom: -7rem;
-    left: 50%;
-    width: 20rem;
-    height: 5rem;
-  
-    transform: translateX(-50%);
-    transition: bottom 1s ease-in-out;
-  
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-    border-width: 0.25rem;
-    border-style: solid;
-    background-color: white;
-    padding: 0.5rem 1rem;
-    border: none;
-    border-left: 6px solid red;
-    border-radius: 0.75rem;
-  
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  
-    .progress {
+  position: fixed;
+  bottom: -7rem;
+  left: 50%;
+  width: 20rem;
+  height: 5rem;
+
+  transform: translateX(-50%);
+  transition: bottom 1s ease-in-out;
+
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  border-width: 0.25rem;
+  border-style: solid;
+  background-color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-left: 6px solid red;
+  border-radius: 0.75rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .progress {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 3px;
+    width: 100%;
+    background-color: #ddd;
+    overflow: hidden;
+
+    &-slider {
+      content: "";
       position: absolute;
       bottom: 0;
-      right: 0;
-      height: 3px;
+      right: 0%;
+      height: 100%;
       width: 100%;
-      background-color: #ddd;
-      overflow: hidden;
-  
-      &-slider {
-        content: "";
-        position: absolute;
-        bottom: 0;
-        right: 0%;
-        height: 100%;
-        width: 100%;
-      }
-  
-      &.active {
-        .progress-slider {
-          animation: progress 2s linear forwards;
-          animation-delay: 0.5s;
-        }
-  
-        @keyframes progress {
-          100% {
-            right: 100%;
-          }
-        }
-      }
     }
-  
-    &-show {
-      bottom: 1rem;
-    }
-  
-    &-end {
-      position: absolute;
-      top: 0rem;
-      right: 0.5rem;
-      font-size: 1.5rem;
-      cursor: pointer;
-      opacity: 0.7;
-  
-      &:hover {
-        opacity: 1;
+
+    &.active {
+      .progress-slider {
+        animation: progress 6s linear forwards;
+        animation-delay: 0.5s;
+      }
+
+      @keyframes progress {
+        100% {
+          right: 100%;
+        }
       }
     }
   }
-  
+
+  &-show {
+    bottom: 1rem;
+  }
+
+  &-end {
+    position: absolute;
+    top: 0rem;
+    right: 0.5rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    opacity: 0.7;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
