@@ -3,6 +3,8 @@ export const env = process.env.BASE_URL_ENV
   : "https://khelotsu-server.onrender.com";
 export const apiEnv = env + "/api/v1";
 
+export const startServerAPI = apiEnv + "/start";
+
 export const userApiEnv = apiEnv + "/users";
 export const roomApiEnv = apiEnv + "/rooms";
 

@@ -1,4 +1,5 @@
 import { createAccessToken, deleteAllDataAndReloead } from "../Utils/genericUtils";
+import { startServerAPI } from "../config";
 import { deleteAllValuesFromCookies } from "./auth";
 
 export class CustomError extends Error {
@@ -24,7 +25,7 @@ export const getCustomHeaders = (isAuthReq: boolean) => {
     return headers;
 }
 
-export const handleAPICall = async (isAuthReq: boolean, url: string, method: string, dataObj: any) => {
+export const handleAPICall = async (isAuthReq: boolean, url: string, method: string, dataObj: any = undefined) => {
     try {
         const headers = getCustomHeaders(isAuthReq);
         const response = await fetch(url, {
@@ -35,12 +36,12 @@ export const handleAPICall = async (isAuthReq: boolean, url: string, method: str
         })
 
 
-        const responseDetails =  await response.json()
-        
+        const responseDetails = await response.json()
+
         if (response?.status >= 400 && response?.status < 600) {
             throw new CustomError(response?.status, responseDetails?.message);
         }
-        
+
         return responseDetails;
 
     } catch (err: any) {
@@ -50,7 +51,15 @@ export const handleAPICall = async (isAuthReq: boolean, url: string, method: str
             }
         }
         console.log(err?.message);
-        
+
         throw new Error(err?.message)
+    }
+}
+
+export const serverStartAPICall = async () => {
+    try {
+        handleAPICall(false, startServerAPI, "GET");
+    } catch (e) {
+        console.error("Error while calling start server api: ", e)
     }
 }
