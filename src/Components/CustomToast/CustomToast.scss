@@ -5,6 +5,7 @@
   left: 50%;
   width: 20rem;
   height: 5rem;
+  z-index: 1000;
 
   transform: translateX(-50%);
   transition: bottom 1s ease-in-out;
